@@ -1,0 +1,56 @@
+.task-board {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 12px;
+	width: 75%;
+	height: 100%;
+	border-radius: 12px;
+	background-color: var(--main-bg-color);
+	padding: 16px 12px;
+}
+
+.task-list {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.task-title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 0.5rem;
+}
+
+.task-point {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+}
+
+.task-point--blue {
+	background-color: #768ce4;
+}
+
+.task-point--yellow {
+	background-color: #feef49;
+}
+
+.task-point--purple {
+	background-color: #d784ea;
+}
+
+.task-point--green {
+	background-color: #80fa9d;
+}
+
+.task-add-new {
+	cursor: pointer;
+	display: flex;
+	justify-content: space-between;
+	background-color: #bcd4fd;
+	color: #1c3dc0;
+	border-radius: 12px;
+	padding: 8px 10px;
+	font-weight: 500;
+}

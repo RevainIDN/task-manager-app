@@ -1,0 +1,9 @@
+.task-item {
+	cursor: pointer;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 12px;
+	border-radius: 12px;
+	background-color: var(--bg-color);
+}

@@ -1,0 +1,18 @@
+.board-item {
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding: 8px;
+	border-radius: 24px;
+}
+
+.board-item:hover {
+	border: 2px #506fea solid;
+	padding: 6px;
+}
+
+.board-img {
+	width: 36px;
+	height: 36px;
+}

@@ -1,0 +1,72 @@
+.sidebar-boards {
+	display: flex;
+	flex-direction: column;
+	width: 25%;
+	height: 100%;
+	background-color: transparent;
+	padding: 8px 12px 0 4px;
+}
+
+.switch-sidebar-cont {
+	height: auto;
+	margin-bottom: 24px;
+}
+
+.switch-sidebar {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: var(--main-bg-color);
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	margin-left: 6px;
+}
+
+.boards-list {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	height: 86%;
+}
+
+.board-add-new {
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px;
+}
+
+.new-board-img {
+	width: 24px;
+	height: 24px;
+}
+
+.switch-theme {
+	display: flex;
+	gap: 4px;
+	width: 100%;
+	height: 50px;
+	padding: 4px;
+	background-color: var(--main-bg-color);
+	border-radius: 8px;
+}
+
+.theme-btn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 8px;
+	position: relative;
+	width: 50%;
+	color: var(--main-color);
+	background-color: transparent;
+	font-weight: 700;
+	border-radius: 8px;
+	padding-right: 20px;
+}
+
+.theme-btn--active {
+	background-color: var(--bg-color);
+}

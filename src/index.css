@@ -5,6 +5,17 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #191B1F;
+  --bg-color: #191B1F;
+  --main-bg-color: #2A2D32;
+  --main-color: #FEF7EE;
+
+  --fill-img-color: #FEF7EE;
+  --search-img: url('icons/search-light.svg');
+}
+
+.light-theme {
+  --bg-color: #fff;
+  --main-bg-color: #F0F6FE;
+  --main-color: #191B1F;
+  --fill-img-color: #191B1F;
 }
