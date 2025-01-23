@@ -1,0 +1,14 @@
+.task-tags {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.task-tag {
+	padding: 2px 4px;
+	border-radius: 5px;
+	color: #191B1F;
+	background-color: #DEE9FC;
+
+	font-size: 0.75rem;
+}
