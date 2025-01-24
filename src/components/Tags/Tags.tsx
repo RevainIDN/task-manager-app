@@ -1,4 +1,4 @@
-import './optional_styles/Tags.css'
+import '../Tags/Tags.css'
 
 export default function Tags() {
 	return (

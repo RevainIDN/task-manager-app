@@ -1,5 +1,5 @@
-import '../styles/Task.css'
-import Tags from './optional_components/Tags'
+import '../Task/Task.css'
+import Tags from '../Tags/Tags'
 
 export default function Task() {
 	return (

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './App.css'
-import Sidebar from './components/Sidebar'
-import TaskBoard from './components/TaskBoard'
+import Sidebar from './components/Sidebar/Sidebar'
+import TaskBoard from './components/TaskBoard/TaskBoard'
 
 export default function App() {
   const [lightTheme, setLightTheme] = useState<boolean>(false);

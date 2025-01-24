@@ -1,5 +1,5 @@
-import '../styles/TaskBoard.css'
-import Task from './Task'
+import '../TaskBoard/TaskBoard.css'
+import Task from '../Task/Task'
 
 export default function TaskBoard() {
 	return (

@@ -1,4 +1,4 @@
-import '../styles/Board.css'
+import '../Board/Board.css'
 
 interface BoardProps {
 	closeSidebar: boolean;

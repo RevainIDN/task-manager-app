@@ -1,6 +1,6 @@
 import { useState, SetStateAction } from 'react'
-import '../styles/Sidebar.css'
-import Board from './Board'
+import '../Sidebar/Sidebar.css'
+import Board from '../Board/Board'
 
 interface SidebarProps {
 	lightTheme: boolean;
