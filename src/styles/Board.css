@@ -7,9 +7,19 @@
 	border-radius: 24px;
 }
 
-.board-item:hover {
-	border: 2px #506fea solid;
-	padding: 6px;
+.board-item--close {
+	justify-content: center;
+	padding: 8px 0;
+}
+
+.board-item:not(.board-item--close):hover {
+	outline: 2px #506fea solid;
+}
+
+.board-item.board-item--close .board-img:hover {
+	outline: 2px #506fea solid;
+	outline-offset: 5px;
+	border-radius: 50%;
 }
 
 .board-img {
