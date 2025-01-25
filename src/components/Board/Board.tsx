@@ -1,17 +1,19 @@
 import '../Board/Board.css'
+import { NewBoardInfo } from '../../types';
 
 interface BoardProps {
 	closeSidebar: boolean;
+	newBoardInfo: NewBoardInfo;
 }
 
-export default function Board({ closeSidebar }: BoardProps) {
+export default function Board({ closeSidebar, newBoardInfo }: BoardProps) {
 	return (
 		<li className={`board-item ${closeSidebar ? 'board-item--close' : ''}`}>
-			<img className='board-img' src="emojis/board-logo-01.png" alt="" />
+			<img className='board-img' src={newBoardInfo.newBoardLogo} alt="Logo" />
 			{closeSidebar ? (
 				null
 			) : (
-				<p className='board-text'>Default Board</p>
+				<p className='board-text'>{newBoardInfo.newBoardName}</p>
 			)}
 		</li>
 	)

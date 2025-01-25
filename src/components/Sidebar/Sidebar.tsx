@@ -1,21 +1,28 @@
 import { useState, SetStateAction } from 'react'
+import { NewBoardInfo } from '../../types';
 import '../Sidebar/Sidebar.css'
 import Board from '../Board/Board'
 
 interface SidebarProps {
 	lightTheme: boolean;
 	setLightTheme: React.Dispatch<SetStateAction<boolean>>;
+	setRenderNewBoard: React.Dispatch<SetStateAction<boolean>>;
+	boards: NewBoardInfo[];
 }
 
-export default function Sidebar({ lightTheme, setLightTheme }: SidebarProps) {
+export default function Sidebar({ lightTheme, setLightTheme, setRenderNewBoard, boards }: SidebarProps) {
 	const [closeSidebar, setCloseSidebar] = useState<boolean>(false);
 
-	const handleSwitch = () => {
+	const handleSwitchColorTheme = () => {
 		setLightTheme(prev => !prev)
 	}
 
 	const handleCloseSidebar = () => {
 		setCloseSidebar(prev => !prev)
+	}
+
+	const handleShowNewBoard = () => {
+		setRenderNewBoard(true);
 	}
 
 	return (
@@ -31,9 +38,11 @@ export default function Sidebar({ lightTheme, setLightTheme }: SidebarProps) {
 				</button>
 			</div>
 			<ul className='boards-list'>
-				<Board closeSidebar={closeSidebar} />
-				<Board closeSidebar={closeSidebar} />
-				<li className={`board-add-new ${closeSidebar ? 'change-display--close' : ''}`}>
+				<Board closeSidebar={closeSidebar} newBoardInfo={{ newBoardName: 'Default Board', newBoardLogo: '/task-manager-app/src/assets/board-logo-01.png' }} />
+				{boards.map((board, index) => (
+					<Board key={index} newBoardInfo={board} closeSidebar={closeSidebar} />
+				))}
+				<li className={`board-add-new ${closeSidebar ? 'change-display--close' : ''}`} onClick={handleShowNewBoard}>
 					<img src={`${lightTheme === false ? 'Add_round_fill-dark_theme.svg' : 'Add_round_fill-light_theme.svg'}`} alt="" />
 
 					{closeSidebar ? (
@@ -43,7 +52,7 @@ export default function Sidebar({ lightTheme, setLightTheme }: SidebarProps) {
 					)}
 				</li>
 			</ul>
-			<div className={`${closeSidebar ? 'switch-theme--close' : 'switch-theme'}`} onClick={handleSwitch}>
+			<div className={`${closeSidebar ? 'switch-theme--close' : 'switch-theme'}`} onClick={handleSwitchColorTheme}>
 				{closeSidebar ? (
 					<button className='theme-btn--active'>
 						<img src={`${lightTheme === false ? 'Moon_fill-dark_theme.svg' : 'Sun_fill-light_theme.svg'}`} alt="" />
