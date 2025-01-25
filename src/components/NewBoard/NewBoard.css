@@ -17,6 +17,10 @@
 	cursor: pointer;
 }
 
+.board-close:hover {
+	transform: scale(125%);
+}
+
 .board-label {
 	display: flex;
 	flex-direction: column;
@@ -60,6 +64,12 @@
 	height: 32px;
 }
 
+.board-logo-item:hover {
+	outline: 2px #506fea solid;
+	outline-offset: 5px;
+	border-radius: 50%;
+}
+
 .board-btns {
 	display: flex;
 	justify-content: start;
@@ -81,4 +91,22 @@
 
 .board-btn-cancel {
 	outline: 3px var(--board-color) solid;
+}
+
+/* hover-эффекты */
+.board-close,
+.board-logo-item,
+.board-btn-create,
+.board-btn-cancel {
+	transition: transform 0.2s ease;
+}
+
+.board-close:hover,
+.board-logo-item:hover {
+	transform: scale(110%);
+}
+
+.board-btn-create:hover,
+.board-btn-cancel:hover {
+	transform: scale(103%);
 }

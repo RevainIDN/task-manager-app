@@ -40,11 +40,12 @@ input,
 textarea,
 select,
 button {
+	color: inherit;
 	font: inherit;
 }
 
 button {
 	cursor: pointer;
 	border: none;
-	color: #FEF7EE;
+	color: inherit;
 }

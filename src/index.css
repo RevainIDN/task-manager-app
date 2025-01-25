@@ -10,7 +10,8 @@
   --main-color: #FEF7EE;
 
   --fill-img-color: #FEF7EE;
-  --search-img: url('icons/search-light.svg');
+
+  --board-color: #4d5157;
 }
 
 .light-theme {
