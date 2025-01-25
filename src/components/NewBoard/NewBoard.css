@@ -1,0 +1,84 @@
+.new-board {
+	position: absolute;
+	max-width: 500px;
+	padding: 25px 32px;
+	background-color: var(--main-bg-color);
+	border-radius: 12px;
+	z-index: 10;
+}
+
+.board-title-cont {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 30px;
+}
+
+.board-close {
+	cursor: pointer;
+}
+
+.board-label {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-bottom: 24px;
+}
+
+.board-input {
+	padding: 12px 12px;
+	border: 1px var(--board-color) solid;
+	border-radius: 16px;
+	color: var(--main-color);
+	background-color: transparent;
+}
+
+.board-input::placeholder {
+	color: var(--board-color);
+}
+
+.board-input:focus {
+	outline: 2px var(--board-color) solid;
+}
+
+.board-logos {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	margin-bottom: 24px;
+}
+
+.board-logo-list {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: 24px;
+	row-gap: 12px;
+}
+
+.board-logo-item {
+	cursor: pointer;
+	width: 32px;
+	height: 32px;
+}
+
+.board-btns {
+	display: flex;
+	justify-content: start;
+	gap: 12px;
+}
+
+.board-btn {
+	padding: 8px 24px;
+	background-color: transparent;
+	border-radius: 24px;
+}
+
+.board-btn-create {
+	display: flex;
+	gap: 12px;
+	background-color: #4063ee;
+	color: #FEF7EE;
+}
+
+.board-btn-cancel {
+	outline: 3px var(--board-color) solid;
+}
