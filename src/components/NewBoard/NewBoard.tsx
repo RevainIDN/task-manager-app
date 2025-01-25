@@ -1,20 +1,49 @@
-import '../NewBoard/NewBoard.css'
 import { useState, useEffect, SetStateAction } from 'react';
+import { NewBoardInfo } from '../../types';
+import '../NewBoard/NewBoard.css'
 import logos from '../../assets/logos';
 
 interface NewBoard {
-	setCreateNewBoard: React.Dispatch<SetStateAction<boolean>>;
+	setRenderNewBoard: React.Dispatch<SetStateAction<boolean>>;
+	addBoard: (newBoardInfo: NewBoardInfo) => void;
 }
 
-export default function NewBoard({ setCreateNewBoard }: NewBoard) {
+export default function NewBoard({ setRenderNewBoard, addBoard }: NewBoard) {
 	const [logoList, setLogoList] = useState<string[]>([]);
+	const [newBoardInfo, setNewBoardInfo] = useState<NewBoardInfo>({
+		newBoardName: '',
+		newBoardLogo: '',
+	});
 
 	useEffect(() => {
 		setLogoList(logos);
 	}, []);
 
 	const handleCancelNewBoard = () => {
-		setCreateNewBoard(false);
+		setRenderNewBoard(false);
+	}
+
+	const saveNewBoardName = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.currentTarget.value;
+		setNewBoardInfo(prevState => ({
+			...prevState,
+			newBoardName: value
+		}))
+	}
+
+	const saveNewBoardLogo = (logo: string) => {
+		setNewBoardInfo(prevState => ({
+			...prevState,
+			newBoardLogo: logo
+		}))
+	}
+
+	const handleCreateBoard = () => {
+		if (newBoardInfo.newBoardName === '' || newBoardInfo.newBoardLogo === '') {
+			return
+		}
+
+		addBoard(newBoardInfo);
 	}
 
 	return (
@@ -25,14 +54,14 @@ export default function NewBoard({ setCreateNewBoard }: NewBoard) {
 			</div>
 			<label className='board-label'>
 				Board name
-				<input className='board-input' type="text" placeholder='e.g: Default Board' />
+				<input className='board-input' type="text" placeholder='e.g: Default Board' onChange={saveNewBoardName} />
 			</label>
 			<div className='board-logos'>
 				<p className='board-logo-title'>Logo</p>
 				<ul className='board-logo-list'>
 					{logos ? (
 						logoList.map((logo, index) => (
-							<li key={index} className='board-logo-item'>
+							<li key={index} className='board-logo-item' onClick={() => saveNewBoardLogo(logo)}>
 								<img src={logo} alt={`Logo ${index + 1}`} />
 							</li>
 						))
@@ -42,7 +71,7 @@ export default function NewBoard({ setCreateNewBoard }: NewBoard) {
 				</ul>
 			</div>
 			<div className='board-btns'>
-				<button className='board-btn board-btn-create'>Create board <img src="Done_round.svg" alt="" /></button>
+				<button className='board-btn board-btn-create' onClick={handleCreateBoard}>Create board <img src="Done_round.svg" alt="" /></button>
 				<button className='board-btn board-btn-cancel' onClick={handleCancelNewBoard}>Cancel</button>
 			</div>
 		</div>
