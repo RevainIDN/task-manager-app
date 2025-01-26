@@ -64,6 +64,13 @@
 	height: 32px;
 }
 
+.board-logo-item--active {
+	transform: scale(110%);
+	outline: 2px #506fea solid;
+	outline-offset: 5px;
+	border-radius: 50%;
+}
+
 .board-logo-item:hover {
 	outline: 2px #506fea solid;
 	outline-offset: 5px;

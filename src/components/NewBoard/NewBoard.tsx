@@ -61,7 +61,7 @@ export default function NewBoard({ setRenderNewBoard, addBoard }: NewBoard) {
 				<ul className='board-logo-list'>
 					{logos ? (
 						logoList.map((logo, index) => (
-							<li key={index} className='board-logo-item' onClick={() => saveNewBoardLogo(logo)}>
+							<li key={index} className={`board-logo-item ${logo === newBoardInfo.newBoardLogo ? 'board-logo-item--active' : ''}`} onClick={() => saveNewBoardLogo(logo)}>
 								<img src={logo} alt={`Logo ${index + 1}`} />
 							</li>
 						))
