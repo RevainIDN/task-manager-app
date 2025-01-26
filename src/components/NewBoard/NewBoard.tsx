@@ -11,8 +11,16 @@ interface NewBoard {
 export default function NewBoard({ setRenderNewBoard, addBoard }: NewBoard) {
 	const [logoList, setLogoList] = useState<string[]>([]);
 	const [newBoardInfo, setNewBoardInfo] = useState<NewBoardInfo>({
+		id: 0,
 		newBoardName: '',
 		newBoardLogo: '',
+		tasks: [{
+			id: 1,
+			img: '',
+			title: 'Default Task',
+			tag: '',
+			status: 'Backlog',
+		}],
 	});
 
 	useEffect(() => {

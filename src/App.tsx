@@ -16,18 +16,32 @@ export default function App() {
   const [boards, setBoards] = useState<NewBoardInfo[]>(() => {
     const storedBoards = getBoardsInLocalStorage();
     return storedBoards.length > 0 ? storedBoards : [{
+      id: 1,
       newBoardName: 'Default Board',
       newBoardLogo: '/task-manager-app/src/assets/board-logo-01.png',
+      tasks: [{
+        id: 1,
+        img: '',
+        title: 'Default Task',
+        tag: '',
+        status: 'Backlog',
+      }],
     }];
   });
-
+  const [currentBoardId, setCurrentBoardId] = useState<number>(() => {
+    const storedBoards = getBoardsInLocalStorage();
+    return storedBoards.length > 0 ? Math.max(...storedBoards.map(board => board.id)) : 1;
+  });
+  localStorage.clear();
   useEffect(() => {
     saveColorThemeToLocalStorage(colorTheme);
     saveBoardsToLocalStorage(boards);
   }, [boards, colorTheme]);
 
   const addBoard = (newBoardInfo: NewBoardInfo) => {
+    newBoardInfo.id = currentBoardId + 1;
     setBoards(prevBoards => [...prevBoards, newBoardInfo]);
+    setCurrentBoardId(currentBoardId + 1);
     setRenderNewBoard(false);
   }
 
