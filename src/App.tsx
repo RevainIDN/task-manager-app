@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { NewBoardInfo } from './types'
+import { NewBoardInfo, BoardTasks } from './types'
 import { saveBoardsToLocalStorage, getBoardsInLocalStorage, saveColorThemeToLocalStorage, getColorThemeInLocalStorage } from './utils/localStorage/localStorage'
 import './App.css'
 import Sidebar from './components/Sidebar/Sidebar'
@@ -9,6 +9,7 @@ import NewTask from './components/NewTask/NewTask'
 import Overlay from './components/Overlay/Overlay'
 
 export default function App() {
+  const [currentBoard, setCurrentBoard] = useState<number>(1);
   const [boards, setBoards] = useState<NewBoardInfo[]>(() => {
     const storedBoards = getBoardsInLocalStorage();
     return storedBoards.length > 0 ? storedBoards : [{
@@ -19,7 +20,10 @@ export default function App() {
         id: 1,
         img: '',
         title: 'Default Task',
-        tag: '',
+        tags: [{
+          tag: 'Concept',
+          color: 'red',
+        }],
         status: 'Backlog',
       }],
     }];
