@@ -9,8 +9,10 @@ interface TaskProps {
 export default function Task({ task }: TaskProps) {
 	return (
 		<li className='task-item'>
-			{task.img === undefined ?
-				(<img className='task-img' src={task.img || undefined} alt="" />) :
+			{task.img ?
+				(<div className='task-img-cont'>
+					<img className='task-img' src={task.img || undefined} alt="" />
+				</div>) :
 				null
 			}
 			<p className='task-text'>{task.title}</p>

@@ -73,6 +73,21 @@ export default function NewTask({ setRenderNewTask, addTask }: NewTaskProps) {
 		}))
 	}
 
+	const generateRandomImage = () => {
+		const randomImageUrl = `https://picsum.photos/800/600?random=${Date.now()}`;
+		setNewTaskInfo(prevState => ({
+			...prevState,
+			img: randomImageUrl,
+		}));
+	};
+
+	const removeImage = () => {
+		setNewTaskInfo(prevState => ({
+			...prevState,
+			img: '',
+		}));
+	};
+
 	const handleCreateTask = () => {
 		addTask(newTaskInfo);
 	}
@@ -83,12 +98,12 @@ export default function NewTask({ setRenderNewTask, addTask }: NewTaskProps) {
 				<h1 className='task-name'>Task details</h1>
 				<img className='task-close' src="Close_round-dark_theme.svg" alt="" onClick={() => setRenderNewTask(false)} />
 			</div>
-			<div className='task-img-cont'>
+			<div className='task-random-img-cont'>
 				<div className='task-img-btns'>
-					<button className='task-img-btn task-img-btn-random'>Randome Cover</button>
-					<button className='task-img-btn task-img-btn-remove'>Remove</button>
+					<button className='task-img-btn task-img-btn-random' onClick={generateRandomImage}>Randome Cover</button>
+					<button className='task-img-btn task-img-btn-remove' onClick={removeImage}>Remove</button>
 				</div>
-				<img className='task-img' src="" alt="" />
+				<img className='task-random-img' src={newTaskInfo.img || undefined} alt="Random Image" />
 			</div>
 			<div className='dropdown-cont'>
 				Status

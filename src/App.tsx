@@ -62,7 +62,7 @@ export default function App() {
     );
     setRenderNewTask(false);
   };
-
+  console.log(boards);
   return (
     <div className={`task-manager ${colorTheme === true ? 'light-theme' : ''}`}>
       <Sidebar

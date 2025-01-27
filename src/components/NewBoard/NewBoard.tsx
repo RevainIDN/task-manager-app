@@ -18,7 +18,10 @@ export default function NewBoard({ setRenderNewBoard, addBoard }: NewBoard) {
 			id: 1,
 			img: '',
 			title: 'Default Task',
-			tags: [],
+			tags: [{
+				tag: 'Concept',
+				color: 'red',
+			}],
 			status: 'Backlog',
 		}],
 	});

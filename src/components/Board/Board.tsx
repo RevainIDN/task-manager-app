@@ -1,6 +1,6 @@
 import '../Board/Board.css'
 import { NewBoardInfo } from '../../types';
-import { useState, SetStateAction } from 'react';
+import { SetStateAction } from 'react';
 
 interface BoardProps {
 	closeSidebar: boolean;
