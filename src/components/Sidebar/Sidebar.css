@@ -76,15 +76,11 @@
 .sidebar-boards--close {
 	width: 6%;
 	justify-content: center;
+	align-items: center;
 }
 
 .change-display--close {
 	display: flex;
 	justify-content: center;
 	padding: 8px 0 0 0;
-}
-
-.switch-theme--close {
-	width: fit-content;
-	height: fit-content;
 }

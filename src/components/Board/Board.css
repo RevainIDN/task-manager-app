@@ -9,17 +9,11 @@
 
 .board-item--close {
 	justify-content: center;
-	padding: 8px 0;
+	padding: 8px 8px;
 }
 
 .board-item:not(.board-item--close):hover {
 	outline: 2px var(--hover-color) solid;
-}
-
-.board-item.board-item--close .board-img:hover {
-	outline: 2px var(--hover-color) solid;
-	outline-offset: 5px;
-	border-radius: 50%;
 }
 
 .board-item--active {

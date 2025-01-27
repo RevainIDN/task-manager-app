@@ -1,14 +1,28 @@
-import '../Task/Task.css'
-import Tags from '../Tag/Tag'
+import '../Task/Task.css';
+import Tag from '../Tag/Tag';
+import { BoardTasks } from '../../types';
 
-export default function Task() {
+interface TaskProps {
+	task: BoardTasks;
+}
+
+export default function Task({ task }: TaskProps) {
 	return (
 		<li className='task-item'>
-			<img className='task-img' src="" alt="" />
-			<p className='task-text'>Create a task manager and as best as possible so that it is clear</p>
+			{task.img === undefined ?
+				(<img className='task-img' src={task.img || undefined} alt="" />) :
+				null
+			}
+			<p className='task-text'>{task.title}</p>
 			<ul className='task-tags'>
-				<Tags />
+				{task.tags ? (
+					task.tags.map((tagInfo, index) => (
+						<Tag key={index} tagInfo={tagInfo} />
+					))
+				) : (
+					null
+				)}
 			</ul>
 		</li>
-	)
+	);
 }

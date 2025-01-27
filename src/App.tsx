@@ -74,6 +74,8 @@ export default function App() {
         currentBoard={currentBoard}
       />
       <TaskBoard
+        currentBoard={currentBoard}
+        boards={boards}
         setRenderNewTask={setRenderNewTask}
       />
       {renderNewBoard && (
