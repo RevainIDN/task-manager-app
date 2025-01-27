@@ -5,7 +5,7 @@ import Tag from '../Tag/Tag';
 
 interface NewTaskProps {
 	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
-	addTask: () => void;
+	addTask: (newTaskInfo: BoardTasks) => void;
 }
 
 export default function NewTask({ setRenderNewTask, addTask }: NewTaskProps) {
@@ -73,13 +73,9 @@ export default function NewTask({ setRenderNewTask, addTask }: NewTaskProps) {
 		}))
 	}
 
-	// const handleCreateTask = () => {
-	// 	if (newTaskInfo.newBoardName === '' || newBoardInfo.newBoardLogo === '') {
-	// 		return
-	// 	}
-
-	// 	addTask(newTaskInfo);
-	// }
+	const handleCreateTask = () => {
+		addTask(newTaskInfo);
+	}
 
 	return (
 		<div className='new-task'>
@@ -139,7 +135,7 @@ export default function NewTask({ setRenderNewTask, addTask }: NewTaskProps) {
 				<input className='task-input' type="text" placeholder='e.g: Default Task' onChange={saveNewTaskName} />
 			</label>
 			<div className='task-btns'>
-				<button className='task-btn task-btn-create'>Save<img src="Done_round.svg" alt="" /></button>
+				<button className='task-btn task-btn-create' onClick={handleCreateTask}>Save<img src="Done_round.svg" alt="" /></button>
 				<button className='task-btn task-btn-cancel' onClick={() => setRenderNewTask(false)}>Cancel</button>
 			</div>
 		</div>

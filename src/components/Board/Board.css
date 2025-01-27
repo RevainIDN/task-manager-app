@@ -22,6 +22,10 @@
 	border-radius: 50%;
 }
 
+.board-item--active {
+	outline: 2px var(--hover-color) solid;
+}
+
 .board-img {
 	width: 36px;
 	height: 36px;

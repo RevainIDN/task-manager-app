@@ -39,6 +39,7 @@ export default function App() {
   const [renderNewBoard, setRenderNewBoard] = useState<boolean>(false);
   const [renderNewTask, setRenderNewTask] = useState<boolean>(false);
   localStorage.clear();
+
   useEffect(() => {
     saveColorThemeToLocalStorage(colorTheme);
     saveBoardsToLocalStorage(boards);
@@ -51,9 +52,16 @@ export default function App() {
     setRenderNewBoard(false);
   }
 
-  const addTask = () => {
-    setRenderNewTask(false)
-  }
+  const addTask = (newTaskInfo: BoardTasks) => {
+    setBoards(prevBoards =>
+      prevBoards.map(board =>
+        board.id === currentBoard
+          ? { ...board, tasks: [...board.tasks, newTaskInfo] }
+          : board
+      )
+    );
+    setRenderNewTask(false);
+  };
 
   return (
     <div className={`task-manager ${colorTheme === true ? 'light-theme' : ''}`}>
@@ -62,6 +70,8 @@ export default function App() {
         setColorTheme={setColorTheme}
         setRenderNewBoard={setRenderNewBoard}
         boards={boards}
+        setCurrentBoard={setCurrentBoard}
+        currentBoard={currentBoard}
       />
       <TaskBoard
         setRenderNewTask={setRenderNewTask}
