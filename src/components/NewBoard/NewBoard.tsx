@@ -27,10 +27,6 @@ export default function NewBoard({ setRenderNewBoard, addBoard }: NewBoard) {
 		setLogoList(logos);
 	}, []);
 
-	const handleCancelNewBoard = () => {
-		setRenderNewBoard(false);
-	}
-
 	const saveNewBoardName = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.currentTarget.value;
 		setNewBoardInfo(prevState => ({
@@ -57,8 +53,8 @@ export default function NewBoard({ setRenderNewBoard, addBoard }: NewBoard) {
 	return (
 		<div className='new-board'>
 			<div className='board-title-cont'>
-				<h1 className='board-title'>New Board</h1>
-				<img className='board-close' src="Close_round-dark_theme.svg" alt="" onClick={handleCancelNewBoard} />
+				<h1 className='board-name'>New Board</h1>
+				<img className='board-close' src="Close_round-dark_theme.svg" alt="" onClick={() => setRenderNewBoard(false)} />
 			</div>
 			<label className='board-label'>
 				Board name
@@ -80,7 +76,7 @@ export default function NewBoard({ setRenderNewBoard, addBoard }: NewBoard) {
 			</div>
 			<div className='board-btns'>
 				<button className='board-btn board-btn-create' onClick={handleCreateBoard}>Create board <img src="Done_round.svg" alt="" /></button>
-				<button className='board-btn board-btn-cancel' onClick={handleCancelNewBoard}>Cancel</button>
+				<button className='board-btn board-btn-cancel' onClick={() => setRenderNewBoard(false)}>Cancel</button>
 			</div>
 		</div>
 	)

@@ -13,11 +13,11 @@
 }
 
 .board-item:not(.board-item--close):hover {
-	outline: 2px #506fea solid;
+	outline: 2px var(--hover-color) solid;
 }
 
 .board-item.board-item--close .board-img:hover {
-	outline: 2px #506fea solid;
+	outline: 2px var(--hover-color) solid;
 	outline-offset: 5px;
 	border-radius: 50%;
 }

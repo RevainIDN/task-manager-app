@@ -1,7 +1,16 @@
 import '../TaskBoard/TaskBoard.css'
 import Task from '../Task/Task'
+import { SetStateAction } from 'react';
 
-export default function TaskBoard() {
+interface TaskBoardProps {
+	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
+}
+
+export default function TaskBoard({ setRenderNewTask }: TaskBoardProps) {
+	const handleShowNewTask = () => {
+		setRenderNewTask(true);
+	}
+
 	return (
 		<div className='task-board'>
 			<ul className='task-list'>
@@ -10,9 +19,9 @@ export default function TaskBoard() {
 					<h1 className='task-text'>Backlog</h1>
 				</li>
 				<Task />
-				<li className='task-add-new'>
+				<li className='task-add-new' onClick={handleShowNewTask}>
 					<p className='task-text'>Add new task card</p>
-					<img className='task-img' src="Add_round.svg" alt="" />
+					<img className='task-board-img' src="Add_round.svg" alt="" />
 				</li>
 			</ul>
 			<ul className='task-list'>

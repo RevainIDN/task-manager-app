@@ -5,14 +5,10 @@ import './App.css'
 import Sidebar from './components/Sidebar/Sidebar'
 import TaskBoard from './components/TaskBoard/TaskBoard'
 import NewBoard from './components/NewBoard/NewBoard'
+import NewTask from './components/NewTask/NewTask'
 import Overlay from './components/Overlay/Overlay'
 
 export default function App() {
-  const [colorTheme, setColorTheme] = useState<boolean>(() => {
-    const storedColorTheme = getColorThemeInLocalStorage();
-    return storedColorTheme ? storedColorTheme : false;
-  });
-  const [renderNewBoard, setRenderNewBoard] = useState<boolean>(false);
   const [boards, setBoards] = useState<NewBoardInfo[]>(() => {
     const storedBoards = getBoardsInLocalStorage();
     return storedBoards.length > 0 ? storedBoards : [{
@@ -32,6 +28,12 @@ export default function App() {
     const storedBoards = getBoardsInLocalStorage();
     return storedBoards.length > 0 ? Math.max(...storedBoards.map(board => board.id)) : 1;
   });
+  const [colorTheme, setColorTheme] = useState<boolean>(() => {
+    const storedColorTheme = getColorThemeInLocalStorage();
+    return storedColorTheme ? storedColorTheme : false;
+  });
+  const [renderNewBoard, setRenderNewBoard] = useState<boolean>(false);
+  const [renderNewTask, setRenderNewTask] = useState<boolean>(false);
   localStorage.clear();
   useEffect(() => {
     saveColorThemeToLocalStorage(colorTheme);
@@ -45,6 +47,10 @@ export default function App() {
     setRenderNewBoard(false);
   }
 
+  const addTask = () => {
+    setRenderNewTask(false)
+  }
+
   return (
     <div className={`task-manager ${colorTheme === true ? 'light-theme' : ''}`}>
       <Sidebar
@@ -53,13 +59,24 @@ export default function App() {
         setRenderNewBoard={setRenderNewBoard}
         boards={boards}
       />
-      <TaskBoard />
+      <TaskBoard
+        setRenderNewTask={setRenderNewTask}
+      />
       {renderNewBoard && (
         <>
           <Overlay onClick={() => setRenderNewBoard(false)} />
           <NewBoard
             setRenderNewBoard={setRenderNewBoard}
             addBoard={addBoard}
+          />
+        </>
+      )}
+      {renderNewTask && (
+        <>
+          <Overlay onClick={() => setRenderNewTask(false)} />
+          <NewTask
+            setRenderNewTask={setRenderNewTask}
+            addTask={addTask}
           />
         </>
       )}

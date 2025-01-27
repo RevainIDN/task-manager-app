@@ -13,6 +13,10 @@
 	margin-bottom: 30px;
 }
 
+.board-name {
+	font-size: 1.5rem;
+}
+
 .board-close {
 	cursor: pointer;
 }
