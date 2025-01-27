@@ -68,6 +68,10 @@
 	height: 32px;
 }
 
+.board-logo-item img {
+	max-width: 100%;
+}
+
 .board-logo-item--active {
 	transform: scale(110%);
 	outline: 2px #506fea solid;
