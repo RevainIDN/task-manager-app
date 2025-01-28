@@ -4,26 +4,33 @@ import '../NewBoard/NewBoard.css'
 import logos from '../../assets/logos';
 
 interface NewBoard {
+	editBoard: boolean;
+	currentBoard: number;
+	boards: NewBoardInfo[];
 	setRenderNewBoard: React.Dispatch<SetStateAction<boolean>>;
 	addBoard: (newBoardInfo: NewBoardInfo) => void;
+	updateBoard: (updatedBoard: NewBoardInfo) => void;
 }
 
-export default function NewBoard({ setRenderNewBoard, addBoard }: NewBoard) {
+export default function NewBoard({ editBoard, currentBoard, boards, setRenderNewBoard, addBoard, updateBoard }: NewBoard) {
 	const [logoList, setLogoList] = useState<string[]>([]);
-	const [newBoardInfo, setNewBoardInfo] = useState<NewBoardInfo>({
-		id: 0,
-		newBoardName: '',
-		newBoardLogo: '',
-		tasks: [{
-			id: 1,
-			img: '',
-			title: 'Default Task',
-			tags: [{
-				tag: 'Concept',
-				color: 'red',
+	const [newBoardInfo, setNewBoardInfo] = useState<NewBoardInfo>(() => {
+		const editableBoard = boards.find(board => board.id === currentBoard);
+		return editBoard && editableBoard ? editableBoard : ({
+			id: 0,
+			newBoardName: '',
+			newBoardLogo: '',
+			tasks: [{
+				id: 1,
+				img: '',
+				title: 'Default Task',
+				tags: [{
+					tag: 'Concept',
+					color: 'red',
+				}],
+				status: 'Backlog',
 			}],
-			status: 'Backlog',
-		}],
+		})
 	});
 
 	useEffect(() => {
@@ -50,7 +57,7 @@ export default function NewBoard({ setRenderNewBoard, addBoard }: NewBoard) {
 			return
 		}
 
-		addBoard(newBoardInfo);
+		editBoard ? updateBoard(newBoardInfo) : addBoard(newBoardInfo);
 	}
 
 	return (

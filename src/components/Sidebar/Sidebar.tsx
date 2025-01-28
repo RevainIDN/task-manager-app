@@ -11,9 +11,10 @@ interface SidebarProps {
 	setBoards: React.Dispatch<SetStateAction<NewBoardInfo[]>>;
 	currentBoard: number;
 	setCurrentBoard: React.Dispatch<SetStateAction<number>>;
+	setEditBoard: React.Dispatch<SetStateAction<boolean>>;
 }
 
-export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, boards, setBoards, currentBoard, setCurrentBoard }: SidebarProps) {
+export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, boards, setBoards, currentBoard, setCurrentBoard, setEditBoard }: SidebarProps) {
 	const [closeSidebar, setCloseSidebar] = useState<boolean>(false);
 
 	const handleSwitchColorTheme = () => {
@@ -50,6 +51,8 @@ export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, 
 						currentBoard={currentBoard}
 						setCurrentBoard={setCurrentBoard}
 						colorTheme={colorTheme}
+						setEditBoard={setEditBoard}
+						setRenderNewBoard={setRenderNewBoard}
 					/>
 				))}
 				<li className={`board-add-new ${closeSidebar ? 'change-display--close' : ''}`} onClick={handleShowNewBoard}>

@@ -38,6 +38,7 @@ export default function App() {
   });
   const [renderNewBoard, setRenderNewBoard] = useState<boolean>(false);
   const [renderNewTask, setRenderNewTask] = useState<boolean>(false);
+  const [editBoard, setEditBoard] = useState<boolean>(false);
   localStorage.clear();
 
   useEffect(() => {
@@ -52,6 +53,16 @@ export default function App() {
     setRenderNewBoard(false);
   }
 
+  const updateBoard = (updatedBoard: NewBoardInfo) => {
+    setBoards(prevBoards =>
+      prevBoards.map(board =>
+        board.id === updatedBoard.id ? updatedBoard : board
+      )
+    );
+    setEditBoard(false);
+    setRenderNewBoard(false);
+  }
+
   const addTask = (newTaskInfo: BoardTasks) => {
     setBoards(prevBoards =>
       prevBoards.map(board =>
@@ -62,7 +73,7 @@ export default function App() {
     );
     setRenderNewTask(false);
   };
-  console.log(boards);
+
   return (
     <div className={`task-manager ${colorTheme === true ? 'light-theme' : ''}`}>
       <Sidebar
@@ -73,6 +84,7 @@ export default function App() {
         setBoards={setBoards}
         setCurrentBoard={setCurrentBoard}
         currentBoard={currentBoard}
+        setEditBoard={setEditBoard}
       />
       <TaskBoard
         currentBoard={currentBoard}
@@ -83,8 +95,12 @@ export default function App() {
         <>
           <Overlay onClick={() => setRenderNewBoard(false)} />
           <NewBoard
+            editBoard={editBoard}
+            currentBoard={currentBoard}
+            boards={boards}
             setRenderNewBoard={setRenderNewBoard}
             addBoard={addBoard}
+            updateBoard={updateBoard}
           />
         </>
       )}
