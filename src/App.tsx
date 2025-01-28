@@ -32,6 +32,12 @@ export default function App() {
     const storedBoards = getBoardsInLocalStorage();
     return storedBoards.length > 0 ? Math.max(...storedBoards.map(board => board.id)) : 1;
   });
+  const [currentTaskId, setCurrentTaskId] = useState<number>(() => {
+    const storedBoards = getBoardsInLocalStorage();
+    const allTasks = storedBoards.flatMap(board => board.tasks);
+    return allTasks.length > 0 ? Math.max(...allTasks.map(task => task.id)) : 1;
+  });
+  const [editTaskId, setEditTaskId] = useState<number | null>(null);
   const [colorTheme, setColorTheme] = useState<boolean>(() => {
     const storedColorTheme = getColorThemeInLocalStorage();
     return storedColorTheme ? storedColorTheme : false;
@@ -40,7 +46,8 @@ export default function App() {
   const [renderNewTask, setRenderNewTask] = useState<boolean>(false);
   const [editBoard, setEditBoard] = useState<boolean>(false);
   localStorage.clear();
-  console.log(editBoard)
+  console.log(currentTaskId)
+  console.log(boards);
   useEffect(() => {
     saveColorThemeToLocalStorage(colorTheme);
     saveBoardsToLocalStorage(boards);
@@ -48,8 +55,17 @@ export default function App() {
 
   const addBoard = (newBoardInfo: NewBoardInfo) => {
     newBoardInfo.id = currentBoardId + 1;
-    setBoards(prevBoards => [...prevBoards, newBoardInfo]);
     setCurrentBoardId(currentBoardId + 1);
+
+    setBoards(prevBoards => {
+      const updatedTasks = newBoardInfo.tasks.map(task => {
+        setCurrentTaskId(prevTaskId => prevTaskId + 1);
+        return { ...task, id: currentTaskId + 1 };
+      });
+
+      return [...prevBoards, { ...newBoardInfo, tasks: updatedTasks }];
+    });
+
     setRenderNewBoard(false);
   }
 
@@ -63,7 +79,30 @@ export default function App() {
     setRenderNewBoard(false);
   }
 
+  const updateTask = (updatedTaskInfo: BoardTasks) => {
+    setBoards(prevBoards =>
+      prevBoards.map(board =>
+        board.id === currentBoard
+          ? {
+            ...board,
+            tasks: board.tasks.map(task =>
+              task.id === updatedTaskInfo.id ? updatedTaskInfo : task
+            ),
+          }
+          : board
+      )
+    );
+    setEditBoard(false);
+    setRenderNewTask(false);
+    setEditTaskId(null);
+  }
+
   const addTask = (newTaskInfo: BoardTasks) => {
+    setCurrentTaskId(prevTaskId => {
+      const newTaskId = prevTaskId + 1;
+      newTaskInfo.id = newTaskId;
+      return newTaskId;
+    });
     setBoards(prevBoards =>
       prevBoards.map(board =>
         board.id === currentBoard
@@ -90,12 +129,16 @@ export default function App() {
         currentBoard={currentBoard}
         boards={boards}
         setRenderNewTask={setRenderNewTask}
+        setEditBoard={setEditBoard}
+        setEditTaskId={setEditTaskId}
       />
       {renderNewBoard && (
         <>
           <Overlay
             setRenderNewBoard={setRenderNewBoard}
+            setRenderNewTask={setRenderNewTask}
             setEditBoard={setEditBoard}
+            setEditTaskId={setEditTaskId}
           />
           <NewBoard
             editBoard={editBoard}
@@ -112,11 +155,18 @@ export default function App() {
         <>
           <Overlay
             setRenderNewBoard={setRenderNewBoard}
+            setRenderNewTask={setRenderNewTask}
             setEditBoard={setEditBoard}
+            setEditTaskId={setEditTaskId}
           />
           <NewTask
+            boards={boards}
+            editBoard={editBoard}
+            setEditBoard={setEditBoard}
+            editTaskId={editTaskId}
             setRenderNewTask={setRenderNewTask}
             addTask={addTask}
+            updateTask={updateTask}
           />
         </>
       )}

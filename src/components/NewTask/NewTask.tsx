@@ -1,24 +1,35 @@
 import { useState, SetStateAction } from 'react';
-import { BoardTasks } from '../../types';
+import { NewBoardInfo, BoardTasks } from '../../types';
 import '../NewTask/NewTask.css'
 import Tag from '../Tag/Tag';
 
 interface NewTaskProps {
+	boards: NewBoardInfo[];
+	editBoard: boolean;
+	setEditBoard: React.Dispatch<SetStateAction<boolean>>;
+	editTaskId: number | null;
 	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
 	addTask: (newTaskInfo: BoardTasks) => void;
+	updateTask: (updatedTaskInfo: BoardTasks) => void;
 }
 
-export default function NewTask({ setRenderNewTask, addTask }: NewTaskProps) {
+export default function NewTask({ boards, editBoard, setEditBoard, editTaskId, setRenderNewTask, addTask, updateTask }: NewTaskProps) {
 	const [dropDownListStatusSelected, setDropDownListStatusSelected] = useState<boolean>(false);
 	const [dropDownListTagsSelected, setDropDownListTagsSelected] = useState<boolean>(false);
 	const [statusPoint, setStatusPoint] = useState<string>('blue');
 
-	const [newTaskInfo, setNewTaskInfo] = useState<BoardTasks>({
-		id: 0,
-		img: '',
-		title: 'Default Task',
-		tags: [{ tag: 'Concept', color: 'red' }],
-		status: 'Backlog',
+	const [newTaskInfo, setNewTaskInfo] = useState<BoardTasks>(() => {
+		const editableBoard = boards.find(board =>
+			board.tasks.some(task => task.id === editTaskId)
+		);
+		const editableTask = editableBoard?.tasks.find(task => task.id === editTaskId);
+		return editBoard && editableTask ? editableTask : ({
+			id: 0,
+			img: '',
+			title: 'Default Task',
+			tags: [{ tag: 'Concept', color: 'red' }],
+			status: 'Backlog',
+		});
 	});
 
 	const selectDropDownStatus = () => {
@@ -88,15 +99,24 @@ export default function NewTask({ setRenderNewTask, addTask }: NewTaskProps) {
 		}));
 	};
 
-	const handleCreateTask = () => {
-		addTask(newTaskInfo);
+	const handleCloseTask = () => {
+		setRenderNewTask(false)
+		setEditBoard(false);
 	}
+
+	const handleSaveTask = () => {
+		if (editTaskId) {
+			updateTask(newTaskInfo);
+		} else {
+			addTask(newTaskInfo);
+		}
+	};
 
 	return (
 		<div className='new-task'>
 			<div className='task-title-cont'>
 				<h1 className='task-name'>Task details</h1>
-				<img className='task-close' src="Close_round-dark_theme.svg" alt="" onClick={() => setRenderNewTask(false)} />
+				<img className='task-close' src="Close_round-dark_theme.svg" alt="" onClick={handleCloseTask} />
 			</div>
 			<div className='task-random-img-cont'>
 				<div className='task-img-btns'>
@@ -147,11 +167,17 @@ export default function NewTask({ setRenderNewTask, addTask }: NewTaskProps) {
 			</div>
 			<label className='task-label'>
 				Task name
-				<input className='task-input' type="text" placeholder='e.g: Default Task' onChange={saveNewTaskName} />
+				<input
+					className='task-input'
+					type="text"
+					placeholder='e.g: Default Task'
+					value={newTaskInfo.title || ''}
+					onChange={saveNewTaskName}
+				/>
 			</label>
 			<div className='task-btns'>
-				<button className='task-btn task-btn-create' onClick={handleCreateTask}>Save<img src="Done_round.svg" alt="" /></button>
-				<button className='task-btn task-btn-cancel' onClick={() => setRenderNewTask(false)}>Cancel</button>
+				<button className='task-btn task-btn-create' onClick={handleSaveTask}>Save<img src="Done_round.svg" alt="" /></button>
+				<button className='task-btn task-btn-cancel' onClick={handleCloseTask}>Cancel</button>
 			</div>
 		</div>
 	)

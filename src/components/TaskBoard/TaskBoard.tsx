@@ -7,9 +7,11 @@ interface TaskBoardProps {
 	currentBoard: number;
 	boards: NewBoardInfo[];
 	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
+	setEditBoard: React.Dispatch<SetStateAction<boolean>>;
+	setEditTaskId: React.Dispatch<SetStateAction<number | null>>;
 }
 
-export default function TaskBoard({ currentBoard, boards, setRenderNewTask }: TaskBoardProps) {
+export default function TaskBoard({ currentBoard, boards, setRenderNewTask, setEditBoard, setEditTaskId }: TaskBoardProps) {
 	const handleShowNewTask = () => {
 		setRenderNewTask(true);
 	}
@@ -20,7 +22,13 @@ export default function TaskBoard({ currentBoard, boards, setRenderNewTask }: Ta
 		return currentBoardTasks
 			.filter(task => task.status === status)
 			.map((task, index) => (
-				<Task key={index} task={task} />
+				<Task
+					key={index}
+					task={task}
+					setRenderNewTask={setRenderNewTask}
+					setEditBoard={setEditBoard}
+					setEditTaskId={setEditTaskId}
+				/>
 			));
 	};
 
