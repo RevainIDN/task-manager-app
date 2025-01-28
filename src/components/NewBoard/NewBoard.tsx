@@ -5,6 +5,7 @@ import logos from '../../assets/logos';
 
 interface NewBoard {
 	editBoard: boolean;
+	setEditBoard: React.Dispatch<SetStateAction<boolean>>;
 	currentBoard: number;
 	boards: NewBoardInfo[];
 	setRenderNewBoard: React.Dispatch<SetStateAction<boolean>>;
@@ -12,7 +13,7 @@ interface NewBoard {
 	updateBoard: (updatedBoard: NewBoardInfo) => void;
 }
 
-export default function NewBoard({ editBoard, currentBoard, boards, setRenderNewBoard, addBoard, updateBoard }: NewBoard) {
+export default function NewBoard({ editBoard, setEditBoard, currentBoard, boards, setRenderNewBoard, addBoard, updateBoard }: NewBoard) {
 	const [logoList, setLogoList] = useState<string[]>([]);
 	const [newBoardInfo, setNewBoardInfo] = useState<NewBoardInfo>(() => {
 		const editableBoard = boards.find(board => board.id === currentBoard);
@@ -36,6 +37,11 @@ export default function NewBoard({ editBoard, currentBoard, boards, setRenderNew
 	useEffect(() => {
 		setLogoList(logos);
 	}, []);
+
+	const handleClose = () => {
+		setRenderNewBoard(false)
+		setEditBoard(false)
+	}
 
 	const saveNewBoardName = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.currentTarget.value;
@@ -64,11 +70,11 @@ export default function NewBoard({ editBoard, currentBoard, boards, setRenderNew
 		<div className='new-board'>
 			<div className='board-title-cont'>
 				<h1 className='board-name'>New Board</h1>
-				<img className='board-close' src="Close_round-dark_theme.svg" alt="" onClick={() => setRenderNewBoard(false)} />
+				<img className='board-close' src="Close_round-dark_theme.svg" alt="" onClick={handleClose} />
 			</div>
 			<label className='board-label'>
 				Board name
-				<input className='board-input' type="text" placeholder='e.g: Default Board' onChange={saveNewBoardName} />
+				<input className='board-input' type="text" placeholder='e.g: Default Board' value={newBoardInfo.newBoardName} onChange={saveNewBoardName} />
 			</label>
 			<div className='board-logos'>
 				<p className='board-logo-title'>Logo</p>
@@ -85,8 +91,8 @@ export default function NewBoard({ editBoard, currentBoard, boards, setRenderNew
 				</ul>
 			</div>
 			<div className='board-btns'>
-				<button className='board-btn board-btn-create' onClick={handleCreateBoard}>Create board <img src="Done_round.svg" alt="" /></button>
-				<button className='board-btn board-btn-cancel' onClick={() => setRenderNewBoard(false)}>Cancel</button>
+				<button className='board-btn board-btn-create' onClick={handleCreateBoard}>{editBoard ? 'Save board' : 'Create board'}<img src="Done_round.svg" alt="" /></button>
+				<button className='board-btn board-btn-cancel' onClick={handleClose}>Cancel</button>
 			</div>
 		</div>
 	)

@@ -40,7 +40,7 @@ export default function App() {
   const [renderNewTask, setRenderNewTask] = useState<boolean>(false);
   const [editBoard, setEditBoard] = useState<boolean>(false);
   localStorage.clear();
-
+  console.log(editBoard)
   useEffect(() => {
     saveColorThemeToLocalStorage(colorTheme);
     saveBoardsToLocalStorage(boards);
@@ -93,9 +93,13 @@ export default function App() {
       />
       {renderNewBoard && (
         <>
-          <Overlay onClick={() => setRenderNewBoard(false)} />
+          <Overlay
+            setRenderNewBoard={setRenderNewBoard}
+            setEditBoard={setEditBoard}
+          />
           <NewBoard
             editBoard={editBoard}
+            setEditBoard={setEditBoard}
             currentBoard={currentBoard}
             boards={boards}
             setRenderNewBoard={setRenderNewBoard}
@@ -106,7 +110,10 @@ export default function App() {
       )}
       {renderNewTask && (
         <>
-          <Overlay onClick={() => setRenderNewTask(false)} />
+          <Overlay
+            setRenderNewBoard={setRenderNewBoard}
+            setEditBoard={setEditBoard}
+          />
           <NewTask
             setRenderNewTask={setRenderNewTask}
             addTask={addTask}
