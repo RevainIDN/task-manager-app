@@ -70,6 +70,7 @@ export default function App() {
         setColorTheme={setColorTheme}
         setRenderNewBoard={setRenderNewBoard}
         boards={boards}
+        setBoards={setBoards}
         setCurrentBoard={setCurrentBoard}
         currentBoard={currentBoard}
       />

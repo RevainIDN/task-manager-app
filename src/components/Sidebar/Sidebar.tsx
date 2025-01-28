@@ -8,11 +8,12 @@ interface SidebarProps {
 	setColorTheme: React.Dispatch<SetStateAction<boolean>>;
 	setRenderNewBoard: React.Dispatch<SetStateAction<boolean>>;
 	boards: NewBoardInfo[];
+	setBoards: React.Dispatch<SetStateAction<NewBoardInfo[]>>;
 	currentBoard: number;
 	setCurrentBoard: React.Dispatch<SetStateAction<number>>;
 }
 
-export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, boards, currentBoard, setCurrentBoard }: SidebarProps) {
+export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, boards, setBoards, currentBoard, setCurrentBoard }: SidebarProps) {
 	const [closeSidebar, setCloseSidebar] = useState<boolean>(false);
 
 	const handleSwitchColorTheme = () => {
@@ -41,7 +42,15 @@ export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, 
 			</div>
 			<ul className='boards-list'>
 				{boards.map((board, index) => (
-					<Board key={index} newBoardInfo={board} closeSidebar={closeSidebar} currentBoard={currentBoard} setCurrentBoard={setCurrentBoard} />
+					<Board
+						key={index}
+						setBoards={setBoards}
+						newBoardInfo={board}
+						closeSidebar={closeSidebar}
+						currentBoard={currentBoard}
+						setCurrentBoard={setCurrentBoard}
+						colorTheme={colorTheme}
+					/>
 				))}
 				<li className={`board-add-new ${closeSidebar ? 'change-display--close' : ''}`} onClick={handleShowNewBoard}>
 					<img src={`${colorTheme === false ? 'Add_round_fill-dark_theme.svg' : 'Add_round_fill-light_theme.svg'}`} alt="" />
