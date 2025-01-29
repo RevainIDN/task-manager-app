@@ -15,7 +15,7 @@ interface UseNewTaskProps {
 export function useNewTask({
 	currentBoard,
 	boards,
-	setBoards, // добавлено setBoards
+	setBoards,
 	editTaskId,
 	setRenderNewTask,
 	setEditBoard,
