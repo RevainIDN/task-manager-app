@@ -4,16 +4,20 @@ import '../NewTask/NewTask.css'
 import Tag from '../Tag/Tag';
 
 interface NewTaskProps {
+	currentBoard: number;
 	boards: NewBoardInfo[];
+	setBoards: React.Dispatch<SetStateAction<NewBoardInfo[]>>;
 	editBoard: boolean;
 	setEditBoard: React.Dispatch<SetStateAction<boolean>>;
 	editTaskId: number | null;
+	setEditTaskId: React.Dispatch<SetStateAction<number | null>>;
 	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
 	addTask: (newTaskInfo: BoardTasks) => void;
 	updateTask: (updatedTaskInfo: BoardTasks) => void;
+	colorTheme: boolean;
 }
 
-export default function NewTask({ boards, editBoard, setEditBoard, editTaskId, setRenderNewTask, addTask, updateTask }: NewTaskProps) {
+export default function NewTask({ currentBoard, boards, setBoards, editBoard, setEditBoard, editTaskId, setEditTaskId, setRenderNewTask, addTask, updateTask, colorTheme }: NewTaskProps) {
 	const [dropDownListStatusSelected, setDropDownListStatusSelected] = useState<boolean>(false);
 	const [dropDownListTagsSelected, setDropDownListTagsSelected] = useState<boolean>(false);
 	const [statusPoint, setStatusPoint] = useState<string>('blue');
@@ -100,11 +104,28 @@ export default function NewTask({ boards, editBoard, setEditBoard, editTaskId, s
 	};
 
 	const handleCloseTask = () => {
-		setRenderNewTask(false)
+		setRenderNewTask(false);
 		setEditBoard(false);
 	}
 
+	const handleDeleteTask = () => {
+		setBoards(prevBoards =>
+			prevBoards.map(board =>
+				board.id === currentBoard
+					? { ...board, tasks: board.tasks.filter(task => task.id !== editTaskId) }
+					: board
+			)
+		);
+		setRenderNewTask(false);
+		setEditBoard(false);
+		setEditTaskId(null);
+	};
+
 	const handleSaveTask = () => {
+		if (newTaskInfo.title === '') {
+			newTaskInfo.title = 'Default Task';
+		}
+
 		if (editTaskId) {
 			updateTask(newTaskInfo);
 		} else {
@@ -178,6 +199,16 @@ export default function NewTask({ boards, editBoard, setEditBoard, editTaskId, s
 			<div className='task-btns'>
 				<button className='task-btn task-btn-create' onClick={handleSaveTask}>Save<img src="Done_round.svg" alt="" /></button>
 				<button className='task-btn task-btn-cancel' onClick={handleCloseTask}>Cancel</button>
+				{editBoard && (
+					<div className='task-delete-cont'>
+						<img
+							className='task-delete'
+							src={`${colorTheme === false ? 'Trash_icon-dark_theme.svg' : 'Trash_icon-light_theme.svg'}`}
+							alt=""
+							onClick={handleDeleteTask}
+						/>
+					</div>
+				)}
 			</div>
 		</div>
 	)

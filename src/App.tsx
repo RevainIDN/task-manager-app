@@ -160,13 +160,17 @@ export default function App() {
             setEditTaskId={setEditTaskId}
           />
           <NewTask
+            currentBoard={currentBoard}
             boards={boards}
+            setBoards={setBoards}
             editBoard={editBoard}
             setEditBoard={setEditBoard}
             editTaskId={editTaskId}
+            setEditTaskId={setEditTaskId}
             setRenderNewTask={setRenderNewTask}
             addTask={addTask}
             updateTask={updateTask}
+            colorTheme={colorTheme}
           />
         </>
       )}

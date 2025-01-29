@@ -200,6 +200,7 @@
 }
 
 .task-btns {
+	position: relative;
 	display: flex;
 	justify-content: start;
 	gap: 12px;
@@ -220,6 +221,28 @@
 
 .task-btn-cancel {
 	outline: 3px var(--board-color) solid;
+}
+
+.task-delete-cont {
+	cursor: pointer;
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	top: 50%;
+	right: 0;
+	width: 40px;
+	height: 40px;
+	border: 3px var(--board-color) solid;
+	border-radius: 50%;
+	padding: 10px;
+	transform: translateY(-50%);
+	transition: transform 0.2s ease;
+}
+
+.task-delete {
+	width: 18px;
+	height: 18px;
 }
 
 /* Шрифты и цвета */
