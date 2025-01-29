@@ -1,55 +1,46 @@
-import { useEffect, useState } from 'react'
-import { NewBoardInfo, BoardTasks } from './types'
-import { saveBoardsToLocalStorage, getBoardsInLocalStorage, saveColorThemeToLocalStorage, getColorThemeInLocalStorage } from './utils/localStorage/localStorage'
-import './App.css'
-import Sidebar from './components/Sidebar/Sidebar'
-import TaskBoard from './components/TaskBoard/TaskBoard'
-import NewBoard from './components/NewBoard/NewBoard'
-import NewTask from './components/NewTask/NewTask'
-import Overlay from './components/Overlay/Overlay'
+import { useEffect, useState } from 'react';
+import { NewBoardInfo, BoardTasks } from './types';
+import './App.css';
+import Sidebar from './components/Sidebar/Sidebar';
+import TaskBoard from './components/TaskBoard/TaskBoard';
+import NewBoard from './components/NewBoard/NewBoard';
+import NewTask from './components/NewTask/NewTask';
+import Overlay from './components/Overlay/Overlay';
+import { useLocalStorage } from './hooks/useLocalStorage';
 
 export default function App() {
   const [currentBoard, setCurrentBoard] = useState<number>(1);
-  const [boards, setBoards] = useState<NewBoardInfo[]>(() => {
-    const storedBoards = getBoardsInLocalStorage();
-    return storedBoards.length > 0 ? storedBoards : [{
+  const [boards, setBoards] = useLocalStorage<NewBoardInfo[]>('boards', [{
+    id: 1,
+    newBoardName: 'Default Board',
+    newBoardLogo: '/task-manager-app/src/assets/board-logo-01.png',
+    tasks: [{
       id: 1,
-      newBoardName: 'Default Board',
-      newBoardLogo: '/task-manager-app/src/assets/board-logo-01.png',
-      tasks: [{
-        id: 1,
-        img: '',
-        title: 'Default Task',
-        tags: [{
-          tag: 'Concept',
-          color: 'red',
-        }],
-        status: 'Backlog',
+      img: '',
+      title: 'Default Task',
+      tags: [{
+        tag: 'Concept',
+        color: 'red',
       }],
-    }];
-  });
+      status: 'Backlog',
+    }],
+  }]);
   const [currentBoardId, setCurrentBoardId] = useState<number>(() => {
-    const storedBoards = getBoardsInLocalStorage();
-    return storedBoards.length > 0 ? Math.max(...storedBoards.map(board => board.id)) : 1;
+    return boards.length > 0 ? Math.max(...boards.map(board => board.id)) : 1;
   });
   const [currentTaskId, setCurrentTaskId] = useState<number>(() => {
-    const storedBoards = getBoardsInLocalStorage();
-    const allTasks = storedBoards.flatMap(board => board.tasks);
+    const allTasks = boards.flatMap(board => board.tasks);
     return allTasks.length > 0 ? Math.max(...allTasks.map(task => task.id)) : 1;
   });
   const [editTaskId, setEditTaskId] = useState<number | null>(null);
-  const [colorTheme, setColorTheme] = useState<boolean>(() => {
-    const storedColorTheme = getColorThemeInLocalStorage();
-    return storedColorTheme ? storedColorTheme : false;
-  });
+  const [colorTheme, setColorTheme] = useLocalStorage<boolean>('colorTheme', false);
   const [renderNewBoard, setRenderNewBoard] = useState<boolean>(false);
   const [renderNewTask, setRenderNewTask] = useState<boolean>(false);
   const [editBoard, setEditBoard] = useState<boolean>(false);
 
   useEffect(() => {
-    saveColorThemeToLocalStorage(colorTheme);
-    saveBoardsToLocalStorage(boards);
-  }, [boards, colorTheme]);
+    setBoards(boards);
+  }, [boards, setBoards]);
 
   const addBoard = (newBoardInfo: NewBoardInfo) => {
     newBoardInfo.id = currentBoardId + 1;
@@ -57,8 +48,9 @@ export default function App() {
 
     setBoards(prevBoards => {
       const updatedTasks = newBoardInfo.tasks.map(task => {
-        setCurrentTaskId(prevTaskId => prevTaskId + 1);
-        return { ...task, id: currentTaskId + 1 };
+        const newTaskId = currentTaskId + 1;
+        setCurrentTaskId(newTaskId);
+        return { ...task, id: newTaskId };
       });
 
       return [...prevBoards, { ...newBoardInfo, tasks: updatedTasks }];
