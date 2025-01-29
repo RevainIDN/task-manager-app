@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NewBoardInfo, BoardTasks } from './types';
+import { NewBoardInfo } from './types';
 import './App.css';
 import Sidebar from './components/Sidebar/Sidebar';
 import TaskBoard from './components/TaskBoard/TaskBoard';
@@ -7,6 +7,7 @@ import NewBoard from './components/NewBoard/NewBoard';
 import NewTask from './components/NewTask/NewTask';
 import Overlay from './components/Overlay/Overlay';
 import { useLocalStorage } from './hooks/useLocalStorage';
+import { addBoard, updateBoard, addTask, updateTask } from './utils/boardUtils';
 
 export default function App() {
   const [currentBoard, setCurrentBoard] = useState<number>(1);
@@ -42,67 +43,6 @@ export default function App() {
     setBoards(boards);
   }, [boards, setBoards]);
 
-  const addBoard = (newBoardInfo: NewBoardInfo) => {
-    newBoardInfo.id = currentBoardId + 1;
-    setCurrentBoardId(currentBoardId + 1);
-
-    setBoards(prevBoards => {
-      const updatedTasks = newBoardInfo.tasks.map(task => {
-        const newTaskId = currentTaskId + 1;
-        setCurrentTaskId(newTaskId);
-        return { ...task, id: newTaskId };
-      });
-
-      return [...prevBoards, { ...newBoardInfo, tasks: updatedTasks }];
-    });
-
-    setRenderNewBoard(false);
-  }
-
-  const updateBoard = (updatedBoard: NewBoardInfo) => {
-    setBoards(prevBoards =>
-      prevBoards.map(board =>
-        board.id === updatedBoard.id ? updatedBoard : board
-      )
-    );
-    setEditBoard(false);
-    setRenderNewBoard(false);
-  }
-
-  const updateTask = (updatedTaskInfo: BoardTasks) => {
-    setBoards(prevBoards =>
-      prevBoards.map(board =>
-        board.id === currentBoard
-          ? {
-            ...board,
-            tasks: board.tasks.map(task =>
-              task.id === updatedTaskInfo.id ? updatedTaskInfo : task
-            ),
-          }
-          : board
-      )
-    );
-    setEditBoard(false);
-    setRenderNewTask(false);
-    setEditTaskId(null);
-  }
-
-  const addTask = (newTaskInfo: BoardTasks) => {
-    setCurrentTaskId(prevTaskId => {
-      const newTaskId = prevTaskId + 1;
-      newTaskInfo.id = newTaskId;
-      return newTaskId;
-    });
-    setBoards(prevBoards =>
-      prevBoards.map(board =>
-        board.id === currentBoard
-          ? { ...board, tasks: [...board.tasks, newTaskInfo] }
-          : board
-      )
-    );
-    setRenderNewTask(false);
-  };
-
   return (
     <div className={`task-manager ${colorTheme === true ? 'light-theme' : ''}`}>
       <Sidebar
@@ -136,8 +76,8 @@ export default function App() {
             currentBoard={currentBoard}
             boards={boards}
             setRenderNewBoard={setRenderNewBoard}
-            addBoard={addBoard}
-            updateBoard={updateBoard}
+            addBoard={(newBoardInfo) => addBoard(newBoardInfo, currentBoardId, setCurrentBoardId, currentTaskId, setCurrentTaskId, setBoards, setRenderNewBoard)}
+            updateBoard={(updatedBoard) => updateBoard(updatedBoard, setBoards, setEditBoard, setRenderNewBoard)}
           />
         </>
       )}
@@ -158,8 +98,8 @@ export default function App() {
             editTaskId={editTaskId}
             setEditTaskId={setEditTaskId}
             setRenderNewTask={setRenderNewTask}
-            addTask={addTask}
-            updateTask={updateTask}
+            addTask={(newTaskInfo) => addTask(newTaskInfo, currentBoard, setCurrentTaskId, setBoards, setRenderNewTask)}
+            updateTask={(updatedTaskInfo) => updateTask(updatedTaskInfo, currentBoard, setBoards, setEditBoard, setRenderNewTask, setEditTaskId)}
             colorTheme={colorTheme}
           />
         </>
