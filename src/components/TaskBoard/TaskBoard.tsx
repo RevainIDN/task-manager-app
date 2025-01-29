@@ -5,19 +5,19 @@ import { NewBoardInfo } from '../../types';
 import Task from '../Task/Task';
 
 interface TaskBoardProps {
-	currentBoard: number;
+	selectedBoardId: number;
 	boards: NewBoardInfo[];
 	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
-	setEditBoard: React.Dispatch<SetStateAction<boolean>>;
+	setEditMode: React.Dispatch<SetStateAction<boolean>>;
 	setEditTaskId: React.Dispatch<SetStateAction<number | null>>;
 }
 
-export default function TaskBoard({ currentBoard, boards, setRenderNewTask, setEditBoard, setEditTaskId }: TaskBoardProps) {
+export default function TaskBoard({ selectedBoardId, boards, setRenderNewTask, setEditMode, setEditTaskId }: TaskBoardProps) {
 	const { handleShowNewTask, renderTasks, renderTasksLength } = useTaskBoard({
-		currentBoard,
+		selectedBoardId,
 		boards,
 		setRenderNewTask,
-		setEditBoard,
+		setEditMode,
 		setEditTaskId,
 	});
 
@@ -33,7 +33,7 @@ export default function TaskBoard({ currentBoard, boards, setRenderNewTask, setE
 						key={task.id}
 						task={task}
 						setRenderNewTask={setRenderNewTask}
-						setEditBoard={setEditBoard}
+						setEditMode={setEditMode}
 						setEditTaskId={setEditTaskId}
 					/>
 				))}
@@ -52,7 +52,7 @@ export default function TaskBoard({ currentBoard, boards, setRenderNewTask, setE
 						key={task.id}
 						task={task}
 						setRenderNewTask={setRenderNewTask}
-						setEditBoard={setEditBoard}
+						setEditMode={setEditMode}
 						setEditTaskId={setEditTaskId}
 					/>
 				))}
@@ -67,7 +67,7 @@ export default function TaskBoard({ currentBoard, boards, setRenderNewTask, setE
 						key={task.id}
 						task={task}
 						setRenderNewTask={setRenderNewTask}
-						setEditBoard={setEditBoard}
+						setEditMode={setEditMode}
 						setEditTaskId={setEditTaskId}
 					/>
 				))}
@@ -82,7 +82,7 @@ export default function TaskBoard({ currentBoard, boards, setRenderNewTask, setE
 						key={task.id}
 						task={task}
 						setRenderNewTask={setRenderNewTask}
-						setEditBoard={setEditBoard}
+						setEditMode={setEditMode}
 						setEditTaskId={setEditTaskId}
 					/>
 				))}

@@ -2,23 +2,23 @@ import { NewBoardInfo } from '../types';
 import { Dispatch, SetStateAction } from 'react';
 
 interface UseTaskBoardProps {
-	currentBoard: number;
+	selectedBoardId: number;
 	boards: NewBoardInfo[];
 	setRenderNewTask: Dispatch<SetStateAction<boolean>>;
-	setEditBoard: Dispatch<SetStateAction<boolean>>;
+	setEditMode: Dispatch<SetStateAction<boolean>>;
 	setEditTaskId: Dispatch<SetStateAction<number | null>>;
 }
 
-export function useTaskBoard({ currentBoard, boards, setRenderNewTask, setEditBoard, setEditTaskId }: UseTaskBoardProps) {
+export function useTaskBoard({ selectedBoardId, boards, setRenderNewTask, setEditMode, setEditTaskId }: UseTaskBoardProps) {
 	// Функция для показа формы создания новой задачи
 	const handleShowNewTask = () => {
 		setEditTaskId(null);
-		setEditBoard(false);
+		setEditMode(false);
 		setRenderNewTask(true);
 	};
 
 	// Получение задач текущей доски
-	const currentBoardTasks = boards.find(board => board.id === currentBoard)?.tasks || [];
+	const currentBoardTasks = boards.find(board => board.id === selectedBoardId)?.tasks || [];
 
 	// Функция для фильтрации задач по их статусу
 	const renderTasks = (status: string) => {

@@ -2,23 +2,23 @@ import { useState, useEffect, SetStateAction } from 'react';
 import { NewBoardInfo, BoardTasks } from '../types';
 
 interface UseNewTaskProps {
-	currentBoard: number;
+	selectedBoardId: number;
 	boards: NewBoardInfo[];
 	setBoards: React.Dispatch<SetStateAction<NewBoardInfo[]>>;
 	editTaskId: number | null;
 	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
-	setEditBoard: React.Dispatch<SetStateAction<boolean>>;
+	setEditMode: React.Dispatch<SetStateAction<boolean>>;
 	setEditTaskId: React.Dispatch<SetStateAction<number | null>>;
 	addTask: (newTaskInfo: BoardTasks) => void;
 	updateTask: (updatedTaskInfo: BoardTasks) => void;
 }
 export function useNewTask({
-	currentBoard,
+	selectedBoardId,
 	boards,
 	setBoards,
 	editTaskId,
 	setRenderNewTask,
-	setEditBoard,
+	setEditMode,
 	setEditTaskId,
 	addTask,
 	updateTask,
@@ -38,7 +38,7 @@ export function useNewTask({
 	// Инициализация состояния задачи при редактировании или создании новой задачи
 	useEffect(() => {
 		if (editTaskId !== null) {
-			const editableBoard = boards.find(board => board.id === currentBoard);
+			const editableBoard = boards.find(board => board.id === selectedBoardId);
 			const editableTask = editableBoard?.tasks.find(task => task.id === editTaskId);
 			if (editableTask) {
 				setNewTaskInfo(editableTask);
@@ -52,7 +52,7 @@ export function useNewTask({
 				status: 'Backlog',
 			});
 		}
-	}, [editTaskId, boards, currentBoard]);
+	}, [editTaskId, boards, selectedBoardId]);
 
 	// Переключение выпадающего списка статуса
 	const selectDropDownStatus = () => {
@@ -150,7 +150,7 @@ export function useNewTask({
 	// Закрытие формы задачи
 	const handleCloseTask = () => {
 		setRenderNewTask(false);
-		setEditBoard(false);
+		setEditMode(false);
 		setEditTaskId(null);
 	};
 
@@ -158,13 +158,13 @@ export function useNewTask({
 	const handleDeleteTask = () => {
 		setBoards(prevBoards =>
 			prevBoards.map(board =>
-				board.id === currentBoard
+				board.id === selectedBoardId
 					? { ...board, tasks: board.tasks.filter(task => task.id !== editTaskId) }
 					: board
 			)
 		);
 		setRenderNewTask(false);
-		setEditBoard(false);
+		setEditMode(false);
 		setEditTaskId(null);
 	};
 

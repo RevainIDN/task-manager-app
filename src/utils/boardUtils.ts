@@ -2,15 +2,15 @@ import { NewBoardInfo, BoardTasks } from "../types";
 
 export const addBoard = (
 	newBoardInfo: NewBoardInfo,
-	currentBoardId: number,
+	selectedBoardId: number,
 	setCurrentBoardId: React.Dispatch<React.SetStateAction<number>>,
 	currentTaskId: number,
 	setCurrentTaskId: React.Dispatch<React.SetStateAction<number>>,
 	setBoards: React.Dispatch<React.SetStateAction<NewBoardInfo[]>>,
 	setRenderNewBoard: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
-	newBoardInfo.id = currentBoardId + 1;
-	setCurrentBoardId(currentBoardId + 1);
+	newBoardInfo.id = selectedBoardId + 1;
+	setCurrentBoardId(selectedBoardId + 1);
 
 	setBoards(prevBoards => {
 		const updatedTasks = newBoardInfo.tasks.map(task => {
@@ -28,7 +28,7 @@ export const addBoard = (
 export const updateBoard = (
 	updatedBoard: NewBoardInfo,
 	setBoards: React.Dispatch<React.SetStateAction<NewBoardInfo[]>>,
-	setEditBoard: React.Dispatch<React.SetStateAction<boolean>>,
+	setEditMode: React.Dispatch<React.SetStateAction<boolean>>,
 	setRenderNewBoard: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
 	setBoards(prevBoards =>
@@ -36,7 +36,7 @@ export const updateBoard = (
 			board.id === updatedBoard.id ? updatedBoard : board
 		)
 	);
-	setEditBoard(false);
+	setEditMode(false);
 	setRenderNewBoard(false);
 };
 
@@ -44,7 +44,7 @@ export const updateTask = (
 	updatedTaskInfo: BoardTasks,
 	currentBoard: number,
 	setBoards: React.Dispatch<React.SetStateAction<NewBoardInfo[]>>,
-	setEditBoard: React.Dispatch<React.SetStateAction<boolean>>,
+	setEditMode: React.Dispatch<React.SetStateAction<boolean>>,
 	setRenderNewTask: React.Dispatch<React.SetStateAction<boolean>>,
 	setEditTaskId: React.Dispatch<React.SetStateAction<number | null>>
 ) => {
@@ -60,7 +60,7 @@ export const updateTask = (
 				: board
 		)
 	);
-	setEditBoard(false);
+	setEditMode(false);
 	setRenderNewTask(false);
 	setEditTaskId(null);
 };

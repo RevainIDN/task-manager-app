@@ -6,15 +6,15 @@ interface BoardProps {
 	closeSidebar: boolean;
 	setBoards: React.Dispatch<SetStateAction<NewBoardInfo[]>>;
 	newBoardInfo: NewBoardInfo;
-	currentBoard: number;
-	setCurrentBoard: React.Dispatch<SetStateAction<number>>;
+	selectedBoardId: number;
+	setSelectedBoardId: React.Dispatch<SetStateAction<number>>;
 	colorTheme: boolean;
-	setEditBoard: React.Dispatch<SetStateAction<boolean>>
+	setEditMode: React.Dispatch<SetStateAction<boolean>>
 	setRenderNewBoard: React.Dispatch<SetStateAction<boolean>>
 }
 
-const handleSelectBoard = (setCurrentBoard: React.Dispatch<SetStateAction<number>>, boardId: number) => {
-	setCurrentBoard(boardId);
+const handleSelectBoard = (setSelectedBoardId: React.Dispatch<SetStateAction<number>>, boardId: number) => {
+	setSelectedBoardId(boardId);
 };
 
 const handleDeleteBoard = (setRenderNotice: React.Dispatch<SetStateAction<boolean>>) => {
@@ -38,7 +38,7 @@ const handleEditBoard = (
 	setRenderNewBoard(true);
 };
 
-export default function Board({ closeSidebar, setBoards, newBoardInfo, currentBoard, setCurrentBoard, colorTheme, setEditBoard, setRenderNewBoard }: BoardProps) {
+export default function Board({ closeSidebar, setBoards, newBoardInfo, selectedBoardId, setSelectedBoardId, colorTheme, setEditMode, setRenderNewBoard }: BoardProps) {
 	const [renderNotice, setRenderNotice] = useState<boolean>(false);
 
 	useEffect(() => {
@@ -47,8 +47,8 @@ export default function Board({ closeSidebar, setBoards, newBoardInfo, currentBo
 
 	return (
 		<li
-			className={`board-item ${closeSidebar ? 'board-item--close' : ''} ${currentBoard === newBoardInfo.id ? 'board-item--active' : ''}`}
-			onClick={() => handleSelectBoard(setCurrentBoard, newBoardInfo.id)}
+			className={`board-item ${closeSidebar ? 'board-item--close' : ''} ${selectedBoardId === newBoardInfo.id ? 'board-item--active' : ''}`}
+			onClick={() => handleSelectBoard(setSelectedBoardId, newBoardInfo.id)}
 		>
 			<img className='board-img' src={newBoardInfo.newBoardLogo} alt="Logo" />
 			{closeSidebar ? null :
@@ -58,7 +58,7 @@ export default function Board({ closeSidebar, setBoards, newBoardInfo, currentBo
 						className='board-edit'
 						src={`${colorTheme === false ? 'Pencil-dark_theme.svg' : 'Pencil-ligth_theme.svg'}`}
 						alt='Edit'
-						onClick={() => handleEditBoard(setEditBoard, setRenderNewBoard)} />
+						onClick={() => handleEditBoard(setEditMode, setRenderNewBoard)} />
 					<img
 						className='board-trash'
 						src={`${colorTheme === false ? 'Trash_icon-dark_theme.svg' : 'Trash_icon-light_theme.svg'}`}
@@ -70,8 +70,18 @@ export default function Board({ closeSidebar, setBoards, newBoardInfo, currentBo
 				<div className='board-notice'>
 					<p className='notice-title'>Delete board?</p>
 					<div className='notice-btns'>
-						<button className='notice-btn' onClick={() => handleConfirmDeleteBoard(setBoards, setRenderNotice, newBoardInfo.id)}>Yes</button>
-						<button className='notice-btn' onClick={() => setRenderNotice(false)}>No</button>
+						<button
+							className='notice-btn'
+							onClick={() => handleConfirmDeleteBoard(setBoards, setRenderNotice, newBoardInfo.id)}
+						>
+							Yes
+						</button>
+						<button
+							className='notice-btn'
+							onClick={() => setRenderNotice(false)}
+						>
+							No
+						</button>
 					</div>
 				</div>
 			) : (

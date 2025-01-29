@@ -5,11 +5,11 @@ import { NewBoardInfo, BoardTasks } from '../../types';
 import Tag from '../Tag/Tag';
 
 interface NewTaskProps {
-	currentBoard: number;
+	selectedBoardId: number;
 	boards: NewBoardInfo[];
 	setBoards: React.Dispatch<SetStateAction<NewBoardInfo[]>>;
-	editBoard: boolean;
-	setEditBoard: React.Dispatch<SetStateAction<boolean>>;
+	editMode: boolean;
+	setEditMode: React.Dispatch<SetStateAction<boolean>>;
 	editTaskId: number | null;
 	setEditTaskId: React.Dispatch<SetStateAction<number | null>>;
 	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
@@ -19,11 +19,11 @@ interface NewTaskProps {
 }
 
 export default function NewTask({
-	currentBoard,
+	selectedBoardId,
 	boards,
 	setBoards,
-	editBoard,
-	setEditBoard,
+	editMode,
+	setEditMode,
 	editTaskId,
 	setEditTaskId,
 	setRenderNewTask,
@@ -47,12 +47,12 @@ export default function NewTask({
 		handleDeleteTask,
 		handleSaveTask,
 	} = useNewTask({
-		currentBoard,
+		selectedBoardId,
 		boards,
 		setBoards,
 		editTaskId,
 		setRenderNewTask,
-		setEditBoard,
+		setEditMode,
 		setEditTaskId,
 		addTask,
 		updateTask,
@@ -62,7 +62,7 @@ export default function NewTask({
 		<div className='new-task'>
 			<div className='task-title-cont'>
 				<h1 className='task-name'>Task details</h1>
-				<img className='task-close' src="Close_round-dark_theme.svg" alt="" onClick={handleCloseTask} />
+				<img className='task-close' src="Close_round-dark_theme.svg" alt="Close" onClick={handleCloseTask} />
 			</div>
 			<div className='task-random-img-cont'>
 				<div className='task-img-btns'>
@@ -122,14 +122,14 @@ export default function NewTask({
 				/>
 			</label>
 			<div className='task-btns'>
-				<button className='task-btn task-btn-create' onClick={handleSaveTask}>Save<img src="Done_round.svg" alt="" /></button>
+				<button className='task-btn task-btn-create' onClick={handleSaveTask}>Save<img src="Done_round.svg" alt="Done" /></button>
 				<button className='task-btn task-btn-cancel' onClick={handleCloseTask}>Cancel</button>
-				{editBoard && (
+				{editMode && (
 					<div className='task-delete-cont'>
 						<img
 							className='task-delete'
 							src={`${colorTheme === false ? 'Trash_icon-dark_theme.svg' : 'Trash_icon-light_theme.svg'}`}
-							alt=""
+							alt="Delete"
 							onClick={handleDeleteTask}
 						/>
 					</div>

@@ -9,12 +9,12 @@ interface SidebarProps {
 	setRenderNewBoard: React.Dispatch<SetStateAction<boolean>>;
 	boards: NewBoardInfo[];
 	setBoards: React.Dispatch<SetStateAction<NewBoardInfo[]>>;
-	currentBoard: number;
-	setCurrentBoard: React.Dispatch<SetStateAction<number>>;
-	setEditBoard: React.Dispatch<SetStateAction<boolean>>;
+	selectedBoardId: number;
+	setSelectedBoardId: React.Dispatch<SetStateAction<number>>;
+	setEditMode: React.Dispatch<SetStateAction<boolean>>;
 }
 
-export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, boards, setBoards, currentBoard, setCurrentBoard, setEditBoard }: SidebarProps) {
+export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, boards, setBoards, selectedBoardId, setSelectedBoardId, setEditMode }: SidebarProps) {
 	const [closeSidebar, setCloseSidebar] = useState<boolean>(false);
 
 	const handleSwitchColorTheme = () => {
@@ -34,9 +34,9 @@ export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, 
 			<div className='switch-sidebar-cont'>
 				<button className='switch-sidebar' onClick={handleCloseSidebar}>
 					{closeSidebar ? (
-						<img src={`${colorTheme === false ? 'Menu-dark_theme.svg' : 'Menu-light_theme.svg'}`} alt="" />
+						<img src={`${colorTheme === false ? 'Menu-dark_theme.svg' : 'Menu-light_theme.svg'}`} alt="Menu" />
 					) : (
-						<img src={`${colorTheme === false ? 'Close_round-dark_theme.svg' : 'Close_round-light_theme.svg'}`} alt="" />
+						<img src={`${colorTheme === false ? 'Close_round-dark_theme.svg' : 'Close_round-light_theme.svg'}`} alt="Close" />
 					)}
 
 				</button>
@@ -48,15 +48,15 @@ export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, 
 						setBoards={setBoards}
 						newBoardInfo={board}
 						closeSidebar={closeSidebar}
-						currentBoard={currentBoard}
-						setCurrentBoard={setCurrentBoard}
+						selectedBoardId={selectedBoardId}
+						setSelectedBoardId={setSelectedBoardId}
 						colorTheme={colorTheme}
-						setEditBoard={setEditBoard}
+						setEditMode={setEditMode}
 						setRenderNewBoard={setRenderNewBoard}
 					/>
 				))}
 				<li className={`board-add-new ${closeSidebar ? 'change-display--close' : ''}`} onClick={handleShowNewBoard}>
-					<img src={`${colorTheme === false ? 'Add_round_fill-dark_theme.svg' : 'Add_round_fill-light_theme.svg'}`} alt="" />
+					<img src={`${colorTheme === false ? 'Add_round_fill-dark_theme.svg' : 'Add_round_fill-light_theme.svg'}`} alt="Add" />
 
 					{closeSidebar ? (
 						null
@@ -68,17 +68,17 @@ export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, 
 			<div className={`${closeSidebar ? 'switch-theme--close' : 'switch-theme'}`} onClick={handleSwitchColorTheme}>
 				{closeSidebar ? (
 					<button className='theme-btn--active'>
-						<img src={`${colorTheme === false ? 'Moon_fill-dark_theme.svg' : 'Sun_fill-light_theme.svg'}`} alt="" />
+						<img src={`${colorTheme === false ? 'Moon_fill-dark_theme.svg' : 'Sun_fill-light_theme.svg'}`} alt="Dark/Light" />
 					</button>
 				) : (
 					<>
 						<button className={`theme-btn theme-btn--dark ${colorTheme === false ? 'theme-btn--active' : ''}`}>
-							<img src={`${colorTheme === false ? 'Moon_fill-dark_theme.svg' : 'Moon_fill-light_theme.svg'}`} alt="" />
+							<img src={`${colorTheme === false ? 'Moon_fill-dark_theme.svg' : 'Moon_fill-light_theme.svg'}`} alt="Dark" />
 
 							Dark
 						</button>
 						<button className={`theme-btn theme-btn--light ${colorTheme === true ? 'theme-btn--active' : ''}`}>
-							<img src={`${colorTheme === false ? 'Sun_fill-dark_theme.svg' : 'Sun_fill-light_theme.svg'}`} alt="" />
+							<img src={`${colorTheme === false ? 'Sun_fill-dark_theme.svg' : 'Sun_fill-light_theme.svg'}`} alt="Light" />
 
 							Light
 						</button>

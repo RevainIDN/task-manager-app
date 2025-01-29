@@ -10,7 +10,6 @@ import { useLocalStorage } from './hooks/useLocalStorage';
 import { addBoard, updateBoard, addTask, updateTask } from './utils/boardUtils';
 
 export default function App() {
-  const [currentBoard, setCurrentBoard] = useState<number>(1);
   const [boards, setBoards] = useLocalStorage<NewBoardInfo[]>('boards', [{
     id: 1,
     newBoardName: 'Default Board',
@@ -26,6 +25,8 @@ export default function App() {
       status: 'Backlog',
     }],
   }]);
+
+  const [selectedBoardId, setSelectedBoardId] = useState<number>(1);
   const [currentBoardId, setCurrentBoardId] = useState<number>(() => {
     return boards.length > 0 ? Math.max(...boards.map(board => board.id)) : 1;
   });
@@ -33,11 +34,12 @@ export default function App() {
     const allTasks = boards.flatMap(board => board.tasks);
     return allTasks.length > 0 ? Math.max(...allTasks.map(task => task.id)) : 1;
   });
+
   const [editTaskId, setEditTaskId] = useState<number | null>(null);
+  const [editMode, setEditMode] = useState<boolean>(false);
   const [colorTheme, setColorTheme] = useLocalStorage<boolean>('colorTheme', false);
   const [renderNewBoard, setRenderNewBoard] = useState<boolean>(false);
   const [renderNewTask, setRenderNewTask] = useState<boolean>(false);
-  const [editBoard, setEditBoard] = useState<boolean>(false);
 
   useEffect(() => {
     setBoards(boards);
@@ -51,15 +53,15 @@ export default function App() {
         setRenderNewBoard={setRenderNewBoard}
         boards={boards}
         setBoards={setBoards}
-        setCurrentBoard={setCurrentBoard}
-        currentBoard={currentBoard}
-        setEditBoard={setEditBoard}
+        setSelectedBoardId={setSelectedBoardId}
+        selectedBoardId={selectedBoardId}
+        setEditMode={setEditMode}
       />
       <TaskBoard
-        currentBoard={currentBoard}
+        selectedBoardId={selectedBoardId}
         boards={boards}
         setRenderNewTask={setRenderNewTask}
-        setEditBoard={setEditBoard}
+        setEditMode={setEditMode}
         setEditTaskId={setEditTaskId}
       />
       {renderNewBoard && (
@@ -67,17 +69,17 @@ export default function App() {
           <Overlay
             setRenderNewBoard={setRenderNewBoard}
             setRenderNewTask={setRenderNewTask}
-            setEditBoard={setEditBoard}
+            setEditMode={setEditMode}
             setEditTaskId={setEditTaskId}
           />
           <NewBoard
-            editBoard={editBoard}
-            setEditBoard={setEditBoard}
-            currentBoard={currentBoard}
+            editMode={editMode}
+            setEditMode={setEditMode}
+            selectedBoardId={selectedBoardId}
             boards={boards}
             setRenderNewBoard={setRenderNewBoard}
             addBoard={(newBoardInfo) => addBoard(newBoardInfo, currentBoardId, setCurrentBoardId, currentTaskId, setCurrentTaskId, setBoards, setRenderNewBoard)}
-            updateBoard={(updatedBoard) => updateBoard(updatedBoard, setBoards, setEditBoard, setRenderNewBoard)}
+            updateBoard={(updatedBoard) => updateBoard(updatedBoard, setBoards, setEditMode, setRenderNewBoard)}
           />
         </>
       )}
@@ -86,20 +88,20 @@ export default function App() {
           <Overlay
             setRenderNewBoard={setRenderNewBoard}
             setRenderNewTask={setRenderNewTask}
-            setEditBoard={setEditBoard}
+            setEditMode={setEditMode}
             setEditTaskId={setEditTaskId}
           />
           <NewTask
-            currentBoard={currentBoard}
+            selectedBoardId={selectedBoardId}
             boards={boards}
             setBoards={setBoards}
-            editBoard={editBoard}
-            setEditBoard={setEditBoard}
+            editMode={editMode}
+            setEditMode={setEditMode}
             editTaskId={editTaskId}
             setEditTaskId={setEditTaskId}
             setRenderNewTask={setRenderNewTask}
-            addTask={(newTaskInfo) => addTask(newTaskInfo, currentBoard, setCurrentTaskId, setBoards, setRenderNewTask)}
-            updateTask={(updatedTaskInfo) => updateTask(updatedTaskInfo, currentBoard, setBoards, setEditBoard, setRenderNewTask, setEditTaskId)}
+            addTask={(newTaskInfo) => addTask(newTaskInfo, selectedBoardId, setCurrentTaskId, setBoards, setRenderNewTask)}
+            updateTask={(updatedTaskInfo) => updateTask(updatedTaskInfo, selectedBoardId, setBoards, setEditMode, setRenderNewTask, setEditTaskId)}
             colorTheme={colorTheme}
           />
         </>
