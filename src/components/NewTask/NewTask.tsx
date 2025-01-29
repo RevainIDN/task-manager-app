@@ -1,4 +1,4 @@
-import { useState, SetStateAction } from 'react';
+import { useState, useEffect, SetStateAction } from 'react';
 import { NewBoardInfo, BoardTasks } from '../../types';
 import '../NewTask/NewTask.css'
 import Tag from '../Tag/Tag';
@@ -35,6 +35,24 @@ export default function NewTask({ currentBoard, boards, setBoards, editBoard, se
 			status: 'Backlog',
 		});
 	});
+
+	useEffect(() => {
+		if (editTaskId !== null) {
+			const editableBoard = boards.find(board => board.id === currentBoard);
+			const editableTask = editableBoard?.tasks.find(task => task.id === editTaskId);
+			if (editableTask) {
+				setNewTaskInfo(editableTask);
+			}
+		} else {
+			setNewTaskInfo({
+				id: 0,
+				img: '',
+				title: 'Default Task',
+				tags: [{ tag: 'Concept', color: 'red' }],
+				status: 'Backlog',
+			});
+		}
+	}, [editTaskId, boards, currentBoard]);
 
 	const selectDropDownStatus = () => {
 		if (dropDownListTagsSelected) setDropDownListTagsSelected(false);
@@ -88,12 +106,36 @@ export default function NewTask({ currentBoard, boards, setBoards, editBoard, se
 		}))
 	}
 
-	const generateRandomImage = () => {
-		const randomImageUrl = `https://picsum.photos/800/600?random=${Date.now()}`;
-		setNewTaskInfo(prevState => ({
-			...prevState,
-			img: randomImageUrl,
-		}));
+	const fetchRandomImage = async () => {
+		try {
+			const response = await fetch(`https://picsum.photos/800/600?random=${Date.now()}`);
+			if (response.ok) {
+				const imageUrl = response.url;
+				return imageUrl;
+			} else {
+				console.error('Failed to fetch the image');
+				return null;
+			}
+		} catch (error) {
+			console.error('Error fetching the image:', error);
+			return null;
+		}
+	};
+
+	const generateRandomImage = async () => {
+		const randomImageUrl = await fetchRandomImage();
+		if (randomImageUrl) {
+			setNewTaskInfo(prevState => {
+				const updatedTaskInfo = {
+					...prevState,
+					img: randomImageUrl,
+				};
+				localStorage.setItem('newTaskInfo', JSON.stringify(updatedTaskInfo));
+				return updatedTaskInfo;
+			});
+		} else {
+			console.error('Failed to generate random image');
+		}
 	};
 
 	const removeImage = () => {
@@ -106,7 +148,8 @@ export default function NewTask({ currentBoard, boards, setBoards, editBoard, se
 	const handleCloseTask = () => {
 		setRenderNewTask(false);
 		setEditBoard(false);
-	}
+		setEditTaskId(null);
+	};
 
 	const handleDeleteTask = () => {
 		setBoards(prevBoards =>

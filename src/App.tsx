@@ -45,9 +45,7 @@ export default function App() {
   const [renderNewBoard, setRenderNewBoard] = useState<boolean>(false);
   const [renderNewTask, setRenderNewTask] = useState<boolean>(false);
   const [editBoard, setEditBoard] = useState<boolean>(false);
-  localStorage.clear();
-  console.log(currentTaskId)
-  console.log(boards);
+
   useEffect(() => {
     saveColorThemeToLocalStorage(colorTheme);
     saveBoardsToLocalStorage(boards);

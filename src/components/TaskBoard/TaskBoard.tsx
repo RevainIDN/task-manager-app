@@ -13,6 +13,8 @@ interface TaskBoardProps {
 
 export default function TaskBoard({ currentBoard, boards, setRenderNewTask, setEditBoard, setEditTaskId }: TaskBoardProps) {
 	const handleShowNewTask = () => {
+		setEditTaskId(null);
+		setEditBoard(false);
 		setRenderNewTask(true);
 	}
 
