@@ -26,7 +26,7 @@ export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, 
 	}
 
 	const handleShowNewBoard = () => {
-		if (boards.length >= 5) {
+		if (boards.length >= 10) {
 			return
 		}
 		setRenderNewBoard(true);

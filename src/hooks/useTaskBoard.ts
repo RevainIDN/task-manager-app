@@ -1,5 +1,5 @@
 import { NewBoardInfo } from '../types';
-import { Dispatch, SetStateAction } from 'react';
+import { useState, Dispatch, SetStateAction, useEffect } from 'react';
 
 interface UseTaskBoardProps {
 	selectedBoardId: number;
@@ -7,32 +7,49 @@ interface UseTaskBoardProps {
 	setRenderNewTask: Dispatch<SetStateAction<boolean>>;
 	setEditMode: Dispatch<SetStateAction<boolean>>;
 	setEditTaskId: Dispatch<SetStateAction<number | null>>;
+	setBoards: Dispatch<SetStateAction<NewBoardInfo[]>>; // Добавляем setBoards
 }
 
-export function useTaskBoard({ selectedBoardId, boards, setRenderNewTask, setEditMode, setEditTaskId }: UseTaskBoardProps) {
-	// Функция для показа формы создания новой задачи
+export function useTaskBoard({ selectedBoardId, boards, setRenderNewTask, setEditMode, setEditTaskId, setBoards }: UseTaskBoardProps) {
+	const [updatedBoards, setUpdatedBoards] = useState(boards);
+
+	useEffect(() => {
+		setUpdatedBoards(boards);
+	}, [boards]);
+
 	const handleShowNewTask = () => {
 		setEditTaskId(null);
 		setEditMode(false);
 		setRenderNewTask(true);
 	};
 
-	// Получение задач текущей доски
-	const currentBoardTasks = boards.find(board => board.id === selectedBoardId)?.tasks || [];
-
-	// Функция для фильтрации задач по их статусу
 	const renderTasks = (status: string) => {
-		return currentBoardTasks.filter(task => task.status === status);
+		const currentBoard = updatedBoards.find(board => board.id === selectedBoardId);
+		return currentBoard ? currentBoard.tasks.filter(task => task.status === status) : [];
 	};
 
-	// Функция для получения количества задач с определенным статусом
 	const renderTasksLength = (status: string) => {
-		return currentBoardTasks.filter(task => task.status === status).length;
+		return renderTasks(status).length;
+	};
+
+	const moveTask = (taskId: number, newStatus: string) => {
+		setBoards(prevBoards => {
+			return prevBoards.map(board => {
+				if (board.id !== selectedBoardId) return board;
+
+				const updatedTasks = board.tasks.map(task =>
+					task.id === taskId ? { ...task, status: newStatus } : task
+				);
+
+				return { ...board, tasks: updatedTasks };
+			});
+		});
 	};
 
 	return {
 		handleShowNewTask,
 		renderTasks,
 		renderTasksLength,
+		moveTask,
 	};
 }

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NewBoardInfo } from './types';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import './App.css';
 import Sidebar from './components/Sidebar/Sidebar';
 import TaskBoard from './components/TaskBoard/TaskBoard';
@@ -43,6 +45,7 @@ export default function App() {
 
   useEffect(() => {
     setBoards(boards);
+    console.log(boards);
   }, [boards, setBoards]);
 
   return (
@@ -57,13 +60,16 @@ export default function App() {
         selectedBoardId={selectedBoardId}
         setEditMode={setEditMode}
       />
-      <TaskBoard
-        selectedBoardId={selectedBoardId}
-        boards={boards}
-        setRenderNewTask={setRenderNewTask}
-        setEditMode={setEditMode}
-        setEditTaskId={setEditTaskId}
-      />
+      <DndProvider backend={HTML5Backend}>
+        <TaskBoard
+          selectedBoardId={selectedBoardId}
+          boards={boards}
+          setBoards={setBoards}
+          setRenderNewTask={setRenderNewTask}
+          setEditMode={setEditMode}
+          setEditTaskId={setEditTaskId}
+        />
+      </DndProvider>
       {renderNewBoard && (
         <>
           <Overlay

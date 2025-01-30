@@ -3,6 +3,7 @@ import { SetStateAction } from 'react';
 import { useTaskBoard } from '../../hooks/useTaskBoard';
 import { NewBoardInfo } from '../../types';
 import Task from '../Task/Task';
+import { useDrop } from 'react-dnd';
 
 interface TaskBoardProps {
 	selectedBoardId: number;
@@ -10,83 +11,58 @@ interface TaskBoardProps {
 	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
 	setEditMode: React.Dispatch<SetStateAction<boolean>>;
 	setEditTaskId: React.Dispatch<SetStateAction<number | null>>;
+	setBoards: React.Dispatch<SetStateAction<NewBoardInfo[]>>;
 }
 
-export default function TaskBoard({ selectedBoardId, boards, setRenderNewTask, setEditMode, setEditTaskId }: TaskBoardProps) {
-	const { handleShowNewTask, renderTasks, renderTasksLength } = useTaskBoard({
+export default function TaskBoard({ selectedBoardId, boards, setRenderNewTask, setEditMode, setEditTaskId, setBoards }: TaskBoardProps) {
+	const { handleShowNewTask, renderTasks, renderTasksLength, moveTask } = useTaskBoard({
 		selectedBoardId,
 		boards,
 		setRenderNewTask,
 		setEditMode,
 		setEditTaskId,
+		setBoards,
 	});
+
+	const TaskColumn = ({ status }: { status: string }) => {
+		const [{ isOver }, drop] = useDrop({
+			accept: 'TASK',
+			drop: (item: { id: number }) => moveTask(item.id, status),
+			collect: monitor => ({
+				isOver: !!monitor.isOver(),
+			}),
+		});
+		console.log(status)
+		return (
+			<ul ref={drop} className={`task-list ${isOver ? 'highlight' : ''}`}>
+				<li className='task-title'>
+					<span className={`task-point task-point--${status.replace(' ', '-').toLowerCase()}`}></span>
+					<h1 className='task-text'>{status} ({renderTasksLength(status)})</h1>
+				</li>
+				{renderTasks(status).map(task => (
+					<Task
+						key={task.id}
+						task={task}
+						setRenderNewTask={setRenderNewTask}
+						setEditMode={setEditMode}
+						setEditTaskId={setEditTaskId}
+					/>
+				))}
+				{status === 'Backlog' && (
+					<li className='task-add-new' onClick={handleShowNewTask}>
+						<p className='task-text'>Add new task card</p>
+						<img className='task-board-img' src="Add_round.svg" alt="Add new task" />
+					</li>
+				)}
+			</ul>
+		);
+	};
 
 	return (
 		<div className='task-board'>
-			<ul className='task-list'>
-				<li className='task-title'>
-					<span className='task-point task-point--blue'></span>
-					<h1 className='task-text'>Backlog ({renderTasksLength('Backlog')})</h1>
-				</li>
-				{renderTasks('Backlog').map(task => (
-					<Task
-						key={task.id}
-						task={task}
-						setRenderNewTask={setRenderNewTask}
-						setEditMode={setEditMode}
-						setEditTaskId={setEditTaskId}
-					/>
-				))}
-				<li className='task-add-new' onClick={handleShowNewTask}>
-					<p className='task-text'>Add new task card</p>
-					<img className='task-board-img' src="Add_round.svg" alt="Add new task" />
-				</li>
-			</ul>
-			<ul className='task-list'>
-				<li className='task-title'>
-					<span className='task-point task-point--yellow'></span>
-					<h1 className='task-text'>In Progress ({renderTasksLength('In Progress')})</h1>
-				</li>
-				{renderTasks('In Progress').map(task => (
-					<Task
-						key={task.id}
-						task={task}
-						setRenderNewTask={setRenderNewTask}
-						setEditMode={setEditMode}
-						setEditTaskId={setEditTaskId}
-					/>
-				))}
-			</ul>
-			<ul className='task-list'>
-				<li className='task-title'>
-					<span className='task-point task-point--purple'></span>
-					<h1 className='task-text'>In Review ({renderTasksLength('In Review')})</h1>
-				</li>
-				{renderTasks('In Review').map(task => (
-					<Task
-						key={task.id}
-						task={task}
-						setRenderNewTask={setRenderNewTask}
-						setEditMode={setEditMode}
-						setEditTaskId={setEditTaskId}
-					/>
-				))}
-			</ul>
-			<ul className='task-list'>
-				<li className='task-title'>
-					<span className='task-point task-point--green'></span>
-					<h1 className='task-text'>Completed ({renderTasksLength('Completed')})</h1>
-				</li>
-				{renderTasks('Completed').map(task => (
-					<Task
-						key={task.id}
-						task={task}
-						setRenderNewTask={setRenderNewTask}
-						setEditMode={setEditMode}
-						setEditTaskId={setEditTaskId}
-					/>
-				))}
-			</ul>
+			{['Backlog', 'In Progress', 'In Review', 'Completed'].map(status => (
+				<TaskColumn key={status} status={status} />
+			))}
 		</div>
 	);
 }
