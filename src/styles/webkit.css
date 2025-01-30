@@ -1,0 +1,10 @@
+/* Общая стилизация всей полосы прокрутки */
+.boards-list::-webkit-scrollbar,
+.task-board::-webkit-scrollbar {
+	width: 0;
+}
+
+/* Синий фон при нажатие на мобильных устройствах */
+.board-item {
+	-webkit-tap-highlight-color: transparent;
+}

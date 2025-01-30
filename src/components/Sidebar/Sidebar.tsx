@@ -26,6 +26,9 @@ export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, 
 	}
 
 	const handleShowNewBoard = () => {
+		if (boards.length >= 5) {
+			return
+		}
 		setRenderNewBoard(true);
 	}
 
@@ -41,7 +44,7 @@ export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, 
 
 				</button>
 			</div>
-			<ul className='boards-list'>
+			<ul className={`boards-list ${closeSidebar ? 'boards-list--close' : ''}`}>
 				{boards.map((board, index) => (
 					<Board
 						key={index}
@@ -61,7 +64,7 @@ export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, 
 					{closeSidebar ? (
 						null
 					) : (
-						<p className='new-board-text'>Add new board</p>
+						<p className='new-board-text'>{boards.length >= 10 ? 'Board limit reached' : 'Add new board'}</p>
 					)}
 				</li>
 			</ul>
