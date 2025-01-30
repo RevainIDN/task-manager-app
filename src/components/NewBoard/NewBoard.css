@@ -125,3 +125,36 @@
 .board-btn-cancel:hover {
 	transform: scale(103%);
 }
+
+
+
+
+
+@media (max-width: 580px) {
+	.new-board {
+		position: fixed;
+		top: 0;
+		left: 0;
+		max-width: 100%;
+		height: 100%;
+		border-radius: 0;
+	}
+}
+
+@media (max-width: 380px) {
+	.new-board {
+		padding: 16px 16px;
+	}
+
+	.board-logo-list {
+		justify-content: center;
+	}
+
+	.board-btns {
+		flex-direction: column;
+	}
+
+	.board-btn-create {
+		justify-content: center;
+	}
+}

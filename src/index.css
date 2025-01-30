@@ -1,4 +1,5 @@
 @import './styles/reset.css';
+@import './styles/webkit.css';
 
 :root {
   font-family: DM Sans;
@@ -13,6 +14,7 @@
   --fill-img-color: #FEF7EE;
   --hover-color: #506fea;
   --board-color: #4d5157;
+  --highlight-color: #383d44;
 }
 
 .light-theme {
@@ -20,4 +22,5 @@
   --main-bg-color: #F0F6FE;
   --main-color: #191B1F;
   --fill-img-color: #191B1F;
+  --highlight-color: #d9e3f2;
 }

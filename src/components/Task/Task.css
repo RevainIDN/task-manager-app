@@ -26,3 +26,7 @@
 	border: none;
 	border-radius: 12px;
 }
+
+.dragging {
+	opacity: 0.5;
+}

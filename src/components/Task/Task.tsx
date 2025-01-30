@@ -2,27 +2,36 @@ import '../Task/Task.css';
 import Tag from '../Tag/Tag';
 import { BoardTasks } from '../../types';
 import { SetStateAction } from 'react';
+import { useDrag } from 'react-dnd';
+
 
 interface TaskProps {
 	task: BoardTasks;
 	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
-	setEditBoard: React.Dispatch<SetStateAction<boolean>>;
+	setEditMode: React.Dispatch<SetStateAction<boolean>>;
 	setEditTaskId: React.Dispatch<SetStateAction<number | null>>;
 }
 
-export default function Task({ task, setRenderNewTask, setEditBoard, setEditTaskId }: TaskProps) {
+export default function Task({ task, setRenderNewTask, setEditMode, setEditTaskId }: TaskProps) {
+	const [{ isDragging }, drag] = useDrag({
+		type: 'TASK',
+		item: { id: task.id, status: task.status },
+		collect: (monitor) => ({
+			isDragging: !!monitor.isDragging(),
+		}),
+	});
 
 	const handleEditTask = () => {
-		setEditBoard(true)
+		setEditMode(true)
 		setRenderNewTask(true);
 		setEditTaskId(task.id);
 	}
 
 	return (
-		<li className='task-item' onClick={handleEditTask}>
+		<li ref={drag} className={`task-item ${isDragging ? 'dragging' : ''}`} onClick={handleEditTask}>
 			{task.img ?
 				(<div className='task-img-cont'>
-					<img className='task-img' src={task.img || undefined} alt="" />
+					<img className='task-img' src={task.img || undefined} alt="Random Image" />
 				</div>) :
 				null
 			}

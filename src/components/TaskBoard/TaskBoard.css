@@ -1,6 +1,6 @@
 .task-board {
 	display: grid;
-	grid-template-columns: repeat(4, 1fr);
+	grid-template-columns: repeat(4, minmax(200px, auto));
 	gap: 12px;
 	width: 100%;
 	height: 100%;
@@ -29,19 +29,19 @@
 	border-radius: 50%;
 }
 
-.task-point--blue {
+.task-point--backlog {
 	background-color: #768ce4;
 }
 
-.task-point--yellow {
+.task-point--in-progress {
 	background-color: #feef49;
 }
 
-.task-point--purple {
+.task-point--in-review {
 	background-color: #d784ea;
 }
 
-.task-point--green {
+.task-point--completed {
 	background-color: #80fa9d;
 }
 
@@ -54,4 +54,19 @@
 	border-radius: 12px;
 	padding: 8px 10px;
 	font-weight: 500;
+}
+
+.highlight {
+	background-color: var(--highlight-color);
+	border-radius: 12px;
+	transition: background-color 0.2s;
+}
+
+
+
+
+@media (max-width: 480px) {
+	.task-board {
+		margin-top: 8px;
+	}
 }
