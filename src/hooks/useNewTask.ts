@@ -25,7 +25,7 @@ export function useNewTask({
 }: UseNewTaskProps) {
 	const [dropDownListStatusSelected, setDropDownListStatusSelected] = useState<boolean>(false);
 	const [dropDownListTagsSelected, setDropDownListTagsSelected] = useState<boolean>(false);
-	const [statusPoint, setStatusPoint] = useState<string>('blue');
+	const [statusPoint, setStatusPoint] = useState<string>('backlog');
 
 	const [newTaskInfo, setNewTaskInfo] = useState<BoardTasks>({
 		id: 0,
@@ -42,6 +42,7 @@ export function useNewTask({
 			const editableTask = editableBoard?.tasks.find(task => task.id === editTaskId);
 			if (editableTask) {
 				setNewTaskInfo(editableTask);
+				setStatusPoint(editableTask.status ? editableTask.status.replace(/\s+/g, '-').toLowerCase() : 'backlog');
 			}
 		} else {
 			setNewTaskInfo({
@@ -51,6 +52,7 @@ export function useNewTask({
 				tags: [{ tag: 'Concept', color: 'red' }],
 				status: 'Backlog',
 			});
+			setStatusPoint('backlog');
 		}
 	}, [editTaskId, boards, selectedBoardId]);
 

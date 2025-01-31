@@ -76,17 +76,17 @@ export default function NewTask({
 				<div className='dropdown' onClick={selectDropDownStatus}>
 					<div className={`task-point task-point--${statusPoint}`}></div><p>{newTaskInfo.status}</p>
 					<ul className={`dropdown-list-status ${dropDownListStatusSelected ? 'dropdown-list--active' : ''}`}>
-						<li className='dropdown-item-status' data-point='blue' onClick={saveNewTaskStatus}>
-							<span className='task-point task-point--blue'></span><p>Backlog</p>
+						<li className='dropdown-item-status' data-point='backlog' onClick={saveNewTaskStatus}>
+							<span className='task-point task-point--backlog'></span><p>Backlog</p>
 						</li>
-						<li className='dropdown-item-status' data-point='yellow' onClick={saveNewTaskStatus}>
-							<span className='task-point task-point--yellow'></span><p>In Progress</p>
+						<li className='dropdown-item-status' data-point='in-progress' onClick={saveNewTaskStatus}>
+							<span className='task-point task-point--in-progress'></span><p>In Progress</p>
 						</li>
-						<li className='dropdown-item-status' data-point='purple' onClick={saveNewTaskStatus}>
-							<span className='task-point task-point--purple'></span><p>In Review</p>
+						<li className='dropdown-item-status' data-point='in-review' onClick={saveNewTaskStatus}>
+							<span className='task-point task-point--in-review'></span><p>In Review</p>
 						</li>
-						<li className='dropdown-item-status' data-point='green' onClick={saveNewTaskStatus}>
-							<span className='task-point task-point--green'></span><p>Completed</p>
+						<li className='dropdown-item-status' data-point='completed' onClick={saveNewTaskStatus}>
+							<span className='task-point task-point--completed'></span><p>Completed</p>
 						</li>
 					</ul>
 				</div>
