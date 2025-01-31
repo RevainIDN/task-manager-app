@@ -15,7 +15,7 @@ export default function App() {
   const [boards, setBoards] = useLocalStorage<NewBoardInfo[]>('boards', [{
     id: 1,
     newBoardName: 'Default Board',
-    newBoardLogo: '/assets/board-logo-01.png',
+    newBoardLogo: '/task-manager-app/assets/board-logo-01.png',
     tasks: [{
       id: 1,
       img: '',
