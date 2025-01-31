@@ -10,12 +10,13 @@ import NewTask from './components/NewTask/NewTask';
 import Overlay from './components/Overlay/Overlay';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { addBoard, updateBoard, addTask, updateTask } from './utils/boardUtils';
+import logos from './assets/logos';
 
 export default function App() {
   const [boards, setBoards] = useLocalStorage<NewBoardInfo[]>('boards', [{
     id: 1,
     newBoardName: 'Default Board',
-    newBoardLogo: 'assets/board-logo-01.png',
+    newBoardLogo: logos[0],
     tasks: [{
       id: 1,
       img: '',
