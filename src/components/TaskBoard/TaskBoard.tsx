@@ -32,7 +32,7 @@ export default function TaskBoard({ selectedBoardId, boards, setRenderNewTask, s
 				isOver: !!monitor.isOver(),
 			}),
 		});
-		console.log(status)
+
 		return (
 			<ul ref={drop} className={`task-list ${isOver ? 'highlight' : ''}`}>
 				<li className='task-title'>
