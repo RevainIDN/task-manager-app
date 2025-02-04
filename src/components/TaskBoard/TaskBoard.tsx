@@ -1,27 +1,25 @@
 import '../TaskBoard/TaskBoard.css';
 import { SetStateAction } from 'react';
 import { useTaskBoard } from '../../hooks/useTaskBoard';
+import { useDrop } from 'react-dnd';
 import { NewBoardInfo } from '../../types';
 import Task from '../Task/Task';
-import { useDrop } from 'react-dnd';
 
 interface TaskBoardProps {
 	selectedBoardId: number;
-	boards: NewBoardInfo[];
 	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
 	setEditMode: React.Dispatch<SetStateAction<boolean>>;
 	setEditTaskId: React.Dispatch<SetStateAction<number | null>>;
-	setBoards: React.Dispatch<SetStateAction<NewBoardInfo[]>>;
+	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
 }
 
-export default function TaskBoard({ selectedBoardId, boards, setRenderNewTask, setEditMode, setEditTaskId, setBoards }: TaskBoardProps) {
+export default function TaskBoard({ selectedBoardId, setRenderNewTask, setEditMode, setEditTaskId, updateBoardsInLocalStorage }: TaskBoardProps) {
 	const { handleShowNewTask, renderTasks, renderTasksLength, moveTask } = useTaskBoard({
 		selectedBoardId,
-		boards,
 		setRenderNewTask,
 		setEditMode,
 		setEditTaskId,
-		setBoards,
+		updateBoardsInLocalStorage,
 	});
 
 	const TaskColumn = ({ status }: { status: string }) => {

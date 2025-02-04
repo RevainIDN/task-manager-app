@@ -1,16 +1,20 @@
 import { NewBoardInfo } from '../types';
 import { useState, Dispatch, SetStateAction, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store';
+import { setBoards } from '../store/boardsSlice';
 
 interface UseTaskBoardProps {
 	selectedBoardId: number;
-	boards: NewBoardInfo[];
 	setRenderNewTask: Dispatch<SetStateAction<boolean>>;
 	setEditMode: Dispatch<SetStateAction<boolean>>;
 	setEditTaskId: Dispatch<SetStateAction<number | null>>;
-	setBoards: Dispatch<SetStateAction<NewBoardInfo[]>>; // Добавляем setBoards
+	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
 }
 
-export function useTaskBoard({ selectedBoardId, boards, setRenderNewTask, setEditMode, setEditTaskId, setBoards }: UseTaskBoardProps) {
+export function useTaskBoard({ selectedBoardId, setRenderNewTask, setEditMode, setEditTaskId, updateBoardsInLocalStorage }: UseTaskBoardProps) {
+	const dispatch = useDispatch<AppDispatch>();
+	const boards = useSelector((state: RootState) => state.boards.boards);
 	const [updatedBoards, setUpdatedBoards] = useState(boards);
 
 	useEffect(() => {
@@ -33,17 +37,18 @@ export function useTaskBoard({ selectedBoardId, boards, setRenderNewTask, setEdi
 	};
 
 	const moveTask = (taskId: number, newStatus: string) => {
-		setBoards(prevBoards => {
-			return prevBoards.map(board => {
-				if (board.id !== selectedBoardId) return board;
+		const updatedBoards = boards.map((board: NewBoardInfo) => {
+			if (board.id !== selectedBoardId) return board;
 
-				const updatedTasks = board.tasks.map(task =>
-					task.id === taskId ? { ...task, status: newStatus } : task
-				);
+			const updatedTasks = board.tasks.map((task) =>
+				task.id === taskId ? { ...task, status: newStatus } : task
+			);
 
-				return { ...board, tasks: updatedTasks };
-			});
+			return { ...board, tasks: updatedTasks };
 		});
+
+		dispatch(setBoards(updatedBoards));
+		updateBoardsInLocalStorage(updatedBoards);
 	};
 
 	return {

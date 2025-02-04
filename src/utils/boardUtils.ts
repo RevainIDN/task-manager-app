@@ -1,88 +1,100 @@
 import { NewBoardInfo, BoardTasks } from "../types";
+import { AppDispatch } from "../store";
+import { setBoards } from "../store/boardsSlice";
 
 export const addBoard = (
 	newBoardInfo: NewBoardInfo,
-	selectedBoardId: number,
-	setCurrentBoardId: React.Dispatch<React.SetStateAction<number>>,
-	currentTaskId: number,
-	setCurrentTaskId: React.Dispatch<React.SetStateAction<number>>,
-	setBoards: React.Dispatch<React.SetStateAction<NewBoardInfo[]>>,
-	setRenderNewBoard: React.Dispatch<React.SetStateAction<boolean>>
+	dispatch: AppDispatch,
+	boards: NewBoardInfo[],
+	setRenderNewBoard: React.Dispatch<React.SetStateAction<boolean>>,
+	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void,
 ) => {
-	newBoardInfo.id = selectedBoardId + 1;
-	setCurrentBoardId(selectedBoardId + 1);
+	const newBoardId = boards.length > 0 ? Math.max(...boards.map(board => board.id)) + 1 : 1;
+	newBoardInfo.id = newBoardId;
 
-	setBoards(prevBoards => {
-		const updatedTasks = newBoardInfo.tasks.map(task => {
-			const newTaskId = currentTaskId + 1;
-			setCurrentTaskId(newTaskId);
-			return { ...task, id: newTaskId };
-		});
+	// Найти максимальный ID среди всех существующих задач
+	const allTasks = boards.flatMap(board => board.tasks);
+	const lastTaskId = allTasks.length > 0 ? Math.max(...allTasks.map(task => task.id)) : 0;
+	const nextTaskId = lastTaskId + 1;
 
-		return [...prevBoards, { ...newBoardInfo, tasks: updatedTasks }];
-	});
+	// Если у новой доски есть дефолтные задачи, назначаем им новые ID
+	const updatedTasks = newBoardInfo.tasks.map((task, index) => ({
+		...task,
+		id: nextTaskId + index, // Каждой задаче присваивается новый ID
+	}));
 
+	const updatedBoards = [...boards, { ...newBoardInfo, tasks: updatedTasks }];
+
+	dispatch(setBoards(updatedBoards));
 	setRenderNewBoard(false);
+	updateBoardsInLocalStorage(updatedBoards);
 };
 
 export const updateBoard = (
 	updatedBoard: NewBoardInfo,
-	setBoards: React.Dispatch<React.SetStateAction<NewBoardInfo[]>>,
+	dispatch: AppDispatch,
+	boards: NewBoardInfo[],
 	setEditMode: React.Dispatch<React.SetStateAction<boolean>>,
-	setRenderNewBoard: React.Dispatch<React.SetStateAction<boolean>>
+	setRenderNewBoard: React.Dispatch<React.SetStateAction<boolean>>,
+	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void,
 ) => {
-	setBoards(prevBoards =>
-		prevBoards.map(board =>
-			board.id === updatedBoard.id ? updatedBoard : board
-		)
+	const updatedBoards = boards.map(board =>
+		board.id === updatedBoard.id ? updatedBoard : board
 	);
+
+	dispatch(setBoards(updatedBoards));
 	setEditMode(false);
 	setRenderNewBoard(false);
+	updateBoardsInLocalStorage(updatedBoards)
 };
 
 export const updateTask = (
 	updatedTaskInfo: BoardTasks,
 	currentBoard: number,
-	setBoards: React.Dispatch<React.SetStateAction<NewBoardInfo[]>>,
+	dispatch: AppDispatch,
+	boards: NewBoardInfo[],
 	setEditMode: React.Dispatch<React.SetStateAction<boolean>>,
 	setRenderNewTask: React.Dispatch<React.SetStateAction<boolean>>,
-	setEditTaskId: React.Dispatch<React.SetStateAction<number | null>>
+	setEditTaskId: React.Dispatch<React.SetStateAction<number | null>>,
+	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void,
 ) => {
-	setBoards(prevBoards =>
-		prevBoards.map(board =>
-			board.id === currentBoard
-				? {
-					...board,
-					tasks: board.tasks.map(task =>
-						task.id === updatedTaskInfo.id ? updatedTaskInfo : task
-					),
-				}
-				: board
-		)
+	const updatedBoards = boards.map(board =>
+		board.id === currentBoard
+			? {
+				...board,
+				tasks: board.tasks.map(task =>
+					task.id === updatedTaskInfo.id ? updatedTaskInfo : task
+				),
+			}
+			: board
 	);
+
+	dispatch(setBoards(updatedBoards));
 	setEditMode(false);
 	setRenderNewTask(false);
 	setEditTaskId(null);
+	updateBoardsInLocalStorage(updatedBoards)
 };
 
 export const addTask = (
 	newTaskInfo: BoardTasks,
 	currentBoard: number,
-	setCurrentTaskId: React.Dispatch<React.SetStateAction<number>>,
-	setBoards: React.Dispatch<React.SetStateAction<NewBoardInfo[]>>,
-	setRenderNewTask: React.Dispatch<React.SetStateAction<boolean>>
+	dispatch: AppDispatch,
+	boards: NewBoardInfo[],
+	setRenderNewTask: React.Dispatch<React.SetStateAction<boolean>>,
+	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void,
 ) => {
-	setCurrentTaskId(prevTaskId => {
-		const newTaskId = prevTaskId + 1;
-		newTaskInfo.id = newTaskId;
-		return newTaskId;
-	});
-	setBoards(prevBoards =>
-		prevBoards.map(board =>
-			board.id === currentBoard
-				? { ...board, tasks: [...board.tasks, newTaskInfo] }
-				: board
-		)
+	const newTaskId = Math.max(...boards.flatMap(board => board.tasks.map(task => task.id))) + 1;
+
+	newTaskInfo.id = newTaskId;
+
+	const updatedBoards = boards.map(board =>
+		board.id === currentBoard
+			? { ...board, tasks: [...board.tasks, newTaskInfo] }
+			: board
 	);
+
+	dispatch(setBoards(updatedBoards));
 	setRenderNewTask(false);
+	updateBoardsInLocalStorage(updatedBoards);
 };

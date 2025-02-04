@@ -1,10 +1,11 @@
 import { useState, useEffect, SetStateAction } from 'react';
-import { NewBoardInfo, BoardTasks } from '../types';
+import { BoardTasks } from '../types';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store';
+import { setBoards } from '../store/boardsSlice';
 
 interface UseNewTaskProps {
 	selectedBoardId: number;
-	boards: NewBoardInfo[];
-	setBoards: React.Dispatch<SetStateAction<NewBoardInfo[]>>;
 	editTaskId: number | null;
 	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
 	setEditMode: React.Dispatch<SetStateAction<boolean>>;
@@ -14,8 +15,6 @@ interface UseNewTaskProps {
 }
 export function useNewTask({
 	selectedBoardId,
-	boards,
-	setBoards,
 	editTaskId,
 	setRenderNewTask,
 	setEditMode,
@@ -23,6 +22,9 @@ export function useNewTask({
 	addTask,
 	updateTask,
 }: UseNewTaskProps) {
+	const dispatch = useDispatch<AppDispatch>();
+	const boards = useSelector((state: RootState) => state.boards.boards);
+
 	const [dropDownListStatusSelected, setDropDownListStatusSelected] = useState<boolean>(false);
 	const [dropDownListTagsSelected, setDropDownListTagsSelected] = useState<boolean>(false);
 	const [statusPoint, setStatusPoint] = useState<string>('backlog');
@@ -158,13 +160,14 @@ export function useNewTask({
 
 	// Удаление задачи
 	const handleDeleteTask = () => {
-		setBoards(prevBoards =>
-			prevBoards.map(board =>
-				board.id === selectedBoardId
-					? { ...board, tasks: board.tasks.filter(task => task.id !== editTaskId) }
-					: board
-			)
+		const updatedBoards = boards.map(board =>
+			board.id === selectedBoardId
+				? { ...board, tasks: board.tasks.filter(task => task.id !== editTaskId) }
+				: board
 		);
+
+		dispatch(setBoards(updatedBoards));
+
 		setRenderNewTask(false);
 		setEditMode(false);
 		setEditTaskId(null);

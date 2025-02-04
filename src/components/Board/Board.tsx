@@ -1,10 +1,12 @@
 import '../Board/Board.css'
 import { NewBoardInfo } from '../../types';
 import { useState, useEffect, SetStateAction } from 'react';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store';
+import { setBoards } from '../../store/boardsSlice';
 
 interface BoardProps {
 	closeSidebar: boolean;
-	setBoards: React.Dispatch<SetStateAction<NewBoardInfo[]>>;
 	newBoardInfo: NewBoardInfo;
 	selectedBoardId: number;
 	setSelectedBoardId: React.Dispatch<SetStateAction<number>>;
@@ -22,11 +24,11 @@ const handleDeleteBoard = (setRenderNotice: React.Dispatch<SetStateAction<boolea
 };
 
 const handleConfirmDeleteBoard = (
-	setBoards: React.Dispatch<SetStateAction<NewBoardInfo[]>>,
+	dispatch: AppDispatch,
 	setRenderNotice: React.Dispatch<SetStateAction<boolean>>,
 	boardId: number
 ) => {
-	setBoards(prevBoards => prevBoards.filter(board => board.id !== boardId));
+	dispatch(setBoards((prevBoards: NewBoardInfo[]) => prevBoards.filter((board: NewBoardInfo) => board.id !== boardId)));
 	setRenderNotice(false);
 };
 
@@ -38,7 +40,8 @@ const handleEditBoard = (
 	setRenderNewBoard(true);
 };
 
-export default function Board({ closeSidebar, setBoards, newBoardInfo, selectedBoardId, setSelectedBoardId, colorTheme, setEditMode, setRenderNewBoard }: BoardProps) {
+export default function Board({ closeSidebar, newBoardInfo, selectedBoardId, setSelectedBoardId, colorTheme, setEditMode, setRenderNewBoard }: BoardProps) {
+	const dispatch = useDispatch<AppDispatch>();
 	const [renderNotice, setRenderNotice] = useState<boolean>(false);
 
 	useEffect(() => {
@@ -72,7 +75,7 @@ export default function Board({ closeSidebar, setBoards, newBoardInfo, selectedB
 					<div className='notice-btns'>
 						<button
 							className='notice-btn'
-							onClick={() => handleConfirmDeleteBoard(setBoards, setRenderNotice, newBoardInfo.id)}
+							onClick={() => handleConfirmDeleteBoard(dispatch, setRenderNotice, newBoardInfo.id)}
 						>
 							Yes
 						</button>

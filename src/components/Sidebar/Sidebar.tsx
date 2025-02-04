@@ -1,5 +1,6 @@
 import { useState, SetStateAction } from 'react'
-import { NewBoardInfo } from '../../types';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 import '../Sidebar/Sidebar.css'
 import Board from '../Board/Board'
 
@@ -7,14 +8,14 @@ interface SidebarProps {
 	colorTheme: boolean;
 	setColorTheme: React.Dispatch<SetStateAction<boolean>>;
 	setRenderNewBoard: React.Dispatch<SetStateAction<boolean>>;
-	boards: NewBoardInfo[];
-	setBoards: React.Dispatch<SetStateAction<NewBoardInfo[]>>;
 	selectedBoardId: number;
 	setSelectedBoardId: React.Dispatch<SetStateAction<number>>;
 	setEditMode: React.Dispatch<SetStateAction<boolean>>;
 }
 
-export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, boards, setBoards, selectedBoardId, setSelectedBoardId, setEditMode }: SidebarProps) {
+export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, selectedBoardId, setSelectedBoardId, setEditMode }: SidebarProps) {
+	const boards = useSelector((state: RootState) => state.boards.boards);
+
 	const [closeSidebar, setCloseSidebar] = useState<boolean>(false);
 
 	const handleSwitchColorTheme = () => {
@@ -48,7 +49,6 @@ export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, 
 				{boards.map((board, index) => (
 					<Board
 						key={index}
-						setBoards={setBoards}
 						newBoardInfo={board}
 						closeSidebar={closeSidebar}
 						selectedBoardId={selectedBoardId}

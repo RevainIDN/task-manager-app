@@ -1,13 +1,11 @@
 import '../NewTask/NewTask.css';
 import { SetStateAction } from 'react';
 import { useNewTask } from '../../hooks/useNewTask';
-import { NewBoardInfo, BoardTasks } from '../../types';
+import { BoardTasks } from '../../types';
 import Tag from '../Tag/Tag';
 
 interface NewTaskProps {
 	selectedBoardId: number;
-	boards: NewBoardInfo[];
-	setBoards: React.Dispatch<SetStateAction<NewBoardInfo[]>>;
 	editMode: boolean;
 	setEditMode: React.Dispatch<SetStateAction<boolean>>;
 	editTaskId: number | null;
@@ -20,8 +18,6 @@ interface NewTaskProps {
 
 export default function NewTask({
 	selectedBoardId,
-	boards,
-	setBoards,
 	editMode,
 	setEditMode,
 	editTaskId,
@@ -48,8 +44,6 @@ export default function NewTask({
 		handleSaveTask,
 	} = useNewTask({
 		selectedBoardId,
-		boards,
-		setBoards,
 		editTaskId,
 		setRenderNewTask,
 		setEditMode,

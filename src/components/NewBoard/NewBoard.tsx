@@ -1,5 +1,7 @@
 import { useState, useEffect, SetStateAction } from 'react';
 import { NewBoardInfo } from '../../types';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 import '../NewBoard/NewBoard.css'
 import logos from '../../assets/logos';
 
@@ -7,7 +9,6 @@ interface NewBoard {
 	editMode: boolean;
 	setEditMode: React.Dispatch<SetStateAction<boolean>>;
 	selectedBoardId: number;
-	boards: NewBoardInfo[];
 	setRenderNewBoard: React.Dispatch<SetStateAction<boolean>>;
 	addBoard: (newBoardInfo: NewBoardInfo) => void;
 	updateBoard: (updatedBoard: NewBoardInfo) => void;
@@ -55,7 +56,8 @@ const handleCreateBoard = (
 	editMode ? updateBoard(newBoardInfo) : addBoard(newBoardInfo);
 };
 
-export default function NewBoard({ editMode, setEditMode, selectedBoardId, boards, setRenderNewBoard, addBoard, updateBoard }: NewBoard) {
+export default function NewBoard({ editMode, setEditMode, selectedBoardId, setRenderNewBoard, addBoard, updateBoard }: NewBoard) {
+	const boards = useSelector((state: RootState) => state.boards.boards);
 	const [logoList, setLogoList] = useState<string[]>([]);
 	const [newBoardInfo, setNewBoardInfo] = useState<NewBoardInfo>(() => {
 		const editableBoard = boards.find(board => board.id === selectedBoardId);

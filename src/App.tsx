@@ -1,52 +1,59 @@
+import './App.css';
 import { useEffect, useState } from 'react';
 import { NewBoardInfo } from './types';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import './App.css';
+import { useLocalStorage } from './hooks/useLocalStorage';
+import { addBoard, updateBoard, addTask, updateTask } from './utils/boardUtils';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from './store';
+import { setBoards } from './store/boardsSlice';
+import logos from './assets/logos';
 import Sidebar from './components/Sidebar/Sidebar';
 import TaskBoard from './components/TaskBoard/TaskBoard';
 import NewBoard from './components/NewBoard/NewBoard';
 import NewTask from './components/NewTask/NewTask';
 import Overlay from './components/Overlay/Overlay';
-import { useLocalStorage } from './hooks/useLocalStorage';
-import { addBoard, updateBoard, addTask, updateTask } from './utils/boardUtils';
-import logos from './assets/logos';
 
 export default function App() {
-  const [boards, setBoards] = useLocalStorage<NewBoardInfo[]>('boards', [{
-    id: 1,
-    newBoardName: 'Default Board',
-    newBoardLogo: logos[0],
-    tasks: [{
+  const dispatch = useDispatch<AppDispatch>();
+  const boards = useSelector((state: RootState) => state.boards.boards);
+
+  const [boardsStorage, setBoardsStorage] = useLocalStorage<NewBoardInfo[]>('boards', [
+    {
       id: 1,
-      img: '',
-      title: 'Default Task',
-      tags: [{
-        tag: 'Concept',
-        color: 'red',
-      }],
-      status: 'Backlog',
-    }],
-  }]);
+      newBoardName: 'Default Board',
+      newBoardLogo: logos[0],
+      tasks: [
+        {
+          id: 1,
+          img: '',
+          title: 'Default Task',
+          tags: [{ tag: 'Concept', color: 'red' }],
+          status: 'Backlog',
+        },
+      ],
+    },
+  ]);
+  console.log(boards)
+  useEffect(() => {
+    if (boardsStorage.length > 0) {
+      dispatch(setBoards(boardsStorage));
+    }
+  }, [boardsStorage, dispatch]);
+
+  const updateBoardsInLocalStorage = (updatedBoards: NewBoardInfo[]) => {
+    setBoardsStorage(updatedBoards);
+  };
 
   const [selectedBoardId, setSelectedBoardId] = useState<number>(1);
-  const [currentBoardId, setCurrentBoardId] = useState<number>(() => {
-    return boards.length > 0 ? Math.max(...boards.map(board => board.id)) : 1;
-  });
-  const [currentTaskId, setCurrentTaskId] = useState<number>(() => {
-    const allTasks = boards.flatMap(board => board.tasks);
-    return allTasks.length > 0 ? Math.max(...allTasks.map(task => task.id)) : 1;
-  });
-
   const [editTaskId, setEditTaskId] = useState<number | null>(null);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [colorTheme, setColorTheme] = useLocalStorage<boolean>('colorTheme', false);
   const [renderNewBoard, setRenderNewBoard] = useState<boolean>(false);
   const [renderNewTask, setRenderNewTask] = useState<boolean>(false);
 
-  useEffect(() => {
-    setBoards(boards);
-  }, [boards, setBoards]);
+
 
   return (
     <div className={`task-manager ${colorTheme === true ? 'light-theme' : ''}`}>
@@ -54,8 +61,6 @@ export default function App() {
         colorTheme={colorTheme}
         setColorTheme={setColorTheme}
         setRenderNewBoard={setRenderNewBoard}
-        boards={boards}
-        setBoards={setBoards}
         setSelectedBoardId={setSelectedBoardId}
         selectedBoardId={selectedBoardId}
         setEditMode={setEditMode}
@@ -63,11 +68,10 @@ export default function App() {
       <DndProvider backend={HTML5Backend}>
         <TaskBoard
           selectedBoardId={selectedBoardId}
-          boards={boards}
-          setBoards={setBoards}
           setRenderNewTask={setRenderNewTask}
           setEditMode={setEditMode}
           setEditTaskId={setEditTaskId}
+          updateBoardsInLocalStorage={updateBoardsInLocalStorage}
         />
       </DndProvider>
       {renderNewBoard && (
@@ -82,10 +86,9 @@ export default function App() {
             editMode={editMode}
             setEditMode={setEditMode}
             selectedBoardId={selectedBoardId}
-            boards={boards}
             setRenderNewBoard={setRenderNewBoard}
-            addBoard={(newBoardInfo) => addBoard(newBoardInfo, currentBoardId, setCurrentBoardId, currentTaskId, setCurrentTaskId, setBoards, setRenderNewBoard)}
-            updateBoard={(updatedBoard) => updateBoard(updatedBoard, setBoards, setEditMode, setRenderNewBoard)}
+            addBoard={(newBoardInfo) => addBoard(newBoardInfo, dispatch, boards, setRenderNewBoard, updateBoardsInLocalStorage)}
+            updateBoard={(updatedBoard) => updateBoard(updatedBoard, dispatch, boards, setEditMode, setRenderNewBoard, updateBoardsInLocalStorage)}
           />
         </>
       )}
@@ -99,15 +102,13 @@ export default function App() {
           />
           <NewTask
             selectedBoardId={selectedBoardId}
-            boards={boards}
-            setBoards={setBoards}
             editMode={editMode}
             setEditMode={setEditMode}
             editTaskId={editTaskId}
             setEditTaskId={setEditTaskId}
             setRenderNewTask={setRenderNewTask}
-            addTask={(newTaskInfo) => addTask(newTaskInfo, selectedBoardId, setCurrentTaskId, setBoards, setRenderNewTask)}
-            updateTask={(updatedTaskInfo) => updateTask(updatedTaskInfo, selectedBoardId, setBoards, setEditMode, setRenderNewTask, setEditTaskId)}
+            addTask={(newTaskInfo) => addTask(newTaskInfo, selectedBoardId, dispatch, boards, setRenderNewTask, updateBoardsInLocalStorage)}
+            updateTask={(updatedTaskInfo) => updateTask(updatedTaskInfo, selectedBoardId, dispatch, boards, setEditMode, setRenderNewTask, setEditTaskId, updateBoardsInLocalStorage)}
             colorTheme={colorTheme}
           />
         </>
