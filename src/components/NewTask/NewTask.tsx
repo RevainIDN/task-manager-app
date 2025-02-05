@@ -1,6 +1,6 @@
 import '../NewTask/NewTask.css';
 import { useNewTask } from '../../hooks/useNewTask';
-import { NewBoardInfo, BoardTasks } from '../../types';
+import { BoardTasks } from '../../types';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import Tag from '../Tag/Tag';
@@ -8,13 +8,11 @@ import Tag from '../Tag/Tag';
 interface NewTaskProps {
 	addTask: (newTaskInfo: BoardTasks) => void;
 	updateTask: (updatedTaskInfo: BoardTasks) => void;
-	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
 }
 
 export default function NewTask({
 	addTask,
 	updateTask,
-	updateBoardsInLocalStorage,
 }: NewTaskProps) {
 	const {
 		dropDownListStatusSelected,
@@ -34,10 +32,9 @@ export default function NewTask({
 	} = useNewTask({
 		addTask,
 		updateTask,
-		updateBoardsInLocalStorage,
 	});
 
-	const { colorTheme, editMode } = useSelector((state: RootState) => state.ui)
+	const { colorTheme, editMode } = useSelector((state: RootState) => state.ui);
 
 	return (
 		<div className='new-task'>

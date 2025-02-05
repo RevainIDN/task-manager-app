@@ -7,7 +7,6 @@ export const addBoard = (
 	newBoardInfo: NewBoardInfo,
 	dispatch: AppDispatch,
 	boards: NewBoardInfo[],
-	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void,
 ) => {
 	const newBoardId = boards.length > 0 ? Math.max(...boards.map(board => board.id)) + 1 : 1;
 	newBoardInfo.id = newBoardId;
@@ -25,14 +24,12 @@ export const addBoard = (
 
 	dispatch(setBoards(updatedBoards));
 	dispatch(setRenderNewBoard(false));
-	updateBoardsInLocalStorage(updatedBoards);
 };
 
 export const updateBoard = (
 	updatedBoard: NewBoardInfo,
 	dispatch: AppDispatch,
 	boards: NewBoardInfo[],
-	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void,
 ) => {
 	const updatedBoards = boards.map(board =>
 		board.id === updatedBoard.id ? updatedBoard : board
@@ -41,7 +38,6 @@ export const updateBoard = (
 	dispatch(setBoards(updatedBoards));
 	dispatch(setEditMode(false));
 	dispatch(setRenderNewBoard(false));
-	updateBoardsInLocalStorage(updatedBoards);
 };
 
 export const updateTask = (
@@ -49,7 +45,6 @@ export const updateTask = (
 	currentBoard: number,
 	dispatch: AppDispatch,
 	boards: NewBoardInfo[],
-	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void,
 ) => {
 	const updatedBoards = boards.map(board =>
 		board.id === currentBoard
@@ -66,7 +61,6 @@ export const updateTask = (
 	dispatch(setEditMode(false));
 	dispatch(setRenderNewTask(false));
 	dispatch(setEditTaskId(null));
-	updateBoardsInLocalStorage(updatedBoards);
 };
 
 export const addTask = (
@@ -74,7 +68,6 @@ export const addTask = (
 	currentBoard: number,
 	dispatch: AppDispatch,
 	boards: NewBoardInfo[],
-	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void,
 ) => {
 	const newTaskId = Math.max(...boards.flatMap(board => board.tasks.map(task => task.id))) + 1;
 
@@ -88,5 +81,4 @@ export const addTask = (
 
 	dispatch(setBoards(updatedBoards));
 	dispatch(setRenderNewTask(false));
-	updateBoardsInLocalStorage(updatedBoards);
 };

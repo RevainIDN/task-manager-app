@@ -5,11 +5,7 @@ import { AppDispatch, RootState } from '../store';
 import { setBoards, setEditTaskId } from '../store/boardsSlice';
 import { setEditMode, setRenderNewTask } from '../store/uiSlice';
 
-interface UseTaskBoardProps {
-	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
-}
-
-export function useTaskBoard({ updateBoardsInLocalStorage }: UseTaskBoardProps) {
+export function useTaskBoard() {
 	const dispatch = useDispatch<AppDispatch>();
 	const { boards, selectedBoardId } = useSelector((state: RootState) => state.boards);
 	const [updatedBoards, setUpdatedBoards] = useState(boards);
@@ -45,7 +41,6 @@ export function useTaskBoard({ updateBoardsInLocalStorage }: UseTaskBoardProps) 
 		});
 
 		dispatch(setBoards(updatedBoards));
-		updateBoardsInLocalStorage(updatedBoards);
 	};
 
 	return {

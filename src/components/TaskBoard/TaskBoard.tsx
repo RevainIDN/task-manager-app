@@ -1,17 +1,10 @@
 import '../TaskBoard/TaskBoard.css';
 import { useTaskBoard } from '../../hooks/useTaskBoard';
 import { useDrop } from 'react-dnd';
-import { NewBoardInfo } from '../../types';
 import Task from '../Task/Task';
 
-interface TaskBoardProps {
-	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
-}
-
-export default function TaskBoard({ updateBoardsInLocalStorage }: TaskBoardProps) {
-	const { handleShowNewTask, renderTasks, renderTasksLength, moveTask } = useTaskBoard({
-		updateBoardsInLocalStorage,
-	});
+export default function TaskBoard() {
+	const { handleShowNewTask, renderTasks, renderTasksLength, moveTask } = useTaskBoard();
 
 	const TaskColumn = ({ status }: { status: string }) => {
 		const [{ isOver }, drop] = useDrop({

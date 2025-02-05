@@ -2,16 +2,10 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { setColorTheme, setRenderNewBoard } from '../../store/uiSlice';
-import { NewBoardInfo } from '../../types';
 import '../Sidebar/Sidebar.css'
 import Board from '../Board/Board'
 
-interface SidebarProps {
-	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
-	updateColorThemeStorage: (updatedColorTheme: boolean) => void;
-}
-
-export default function Sidebar({ updateBoardsInLocalStorage, updateColorThemeStorage }: SidebarProps) {
+export default function Sidebar() {
 	const dispatch = useDispatch<AppDispatch>();
 	const boards = useSelector((state: RootState) => state.boards.boards);
 	const { colorTheme } = useSelector((state: RootState) => state.ui);
@@ -19,7 +13,6 @@ export default function Sidebar({ updateBoardsInLocalStorage, updateColorThemeSt
 
 	const handleSwitchColorTheme = () => {
 		dispatch(setColorTheme(!colorTheme));
-		updateColorThemeStorage(!colorTheme)
 	}
 
 	const handleCloseSidebar = () => {
@@ -52,7 +45,6 @@ export default function Sidebar({ updateBoardsInLocalStorage, updateColorThemeSt
 						newBoardInfo={board}
 						closeSidebar={closeSidebar}
 						colorTheme={colorTheme}
-						updateBoardsInLocalStorage={updateBoardsInLocalStorage}
 					/>
 				))}
 				<li className={`board-add-new ${closeSidebar ? 'change-display--close' : ''}`} onClick={handleShowNewBoard}>

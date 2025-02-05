@@ -10,7 +10,6 @@ interface BoardProps {
 	closeSidebar: boolean;
 	newBoardInfo: NewBoardInfo;
 	colorTheme: boolean;
-	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
 }
 
 const handleSelectBoard = (dispatch: AppDispatch, boardId: number) => {
@@ -27,11 +26,9 @@ const handleConfirmDeleteBoard = (
 	setRenderNotice: React.Dispatch<SetStateAction<boolean>>,
 	boardId: number,
 	boards: NewBoardInfo[],
-	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void,
 ) => {
 	dispatch(setBoards(boards.filter((board: NewBoardInfo) => board.id !== boardId)));
 	setRenderNotice(false);
-	updateBoardsInLocalStorage(boards.filter((board: NewBoardInfo) => board.id !== boardId));
 };
 
 const handleEditBoard = (
@@ -41,7 +38,7 @@ const handleEditBoard = (
 	dispatch(setRenderNewBoard(true));
 };
 
-export default function Board({ closeSidebar, newBoardInfo, colorTheme, updateBoardsInLocalStorage }: BoardProps) {
+export default function Board({ closeSidebar, newBoardInfo, colorTheme }: BoardProps) {
 	const dispatch = useDispatch<AppDispatch>();
 	const { boards, selectedBoardId } = useSelector((state: RootState) => state.boards);
 	const [renderNotice, setRenderNotice] = useState<boolean>(false);
@@ -77,7 +74,7 @@ export default function Board({ closeSidebar, newBoardInfo, colorTheme, updateBo
 					<div className='notice-btns'>
 						<button
 							className='notice-btn'
-							onClick={() => handleConfirmDeleteBoard(dispatch, setRenderNotice, newBoardInfo.id, boards, updateBoardsInLocalStorage)}
+							onClick={() => handleConfirmDeleteBoard(dispatch, setRenderNotice, newBoardInfo.id, boards)}
 						>
 							Yes
 						</button>
