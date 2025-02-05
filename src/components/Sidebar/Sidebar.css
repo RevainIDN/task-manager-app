@@ -109,17 +109,19 @@
 	.sidebar-boards--close {
 		position: static;
 		width: fit-content;
+		padding-top: 4px;
 	}
 }
 
 @media (max-width: 640px) {
 	.sidebar-boards {
 		width: 100%;
-		padding: 4px 16px 0 16px;
+		padding: 20px 16px 0 16px;
 	}
 
 	.sidebar-boards--close {
 		width: fit-content;
+		padding-top: 4px;
 	}
 }
 
