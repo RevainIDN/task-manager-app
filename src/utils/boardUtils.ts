@@ -1,6 +1,6 @@
 import { NewBoardInfo, BoardTasks } from "../types";
 import { AppDispatch } from "../store";
-import { setBoards } from "../store/boardsSlice";
+import { setBoards, setEditTaskId } from "../store/boardsSlice";
 
 export const addBoard = (
 	newBoardInfo: NewBoardInfo,
@@ -53,7 +53,6 @@ export const updateTask = (
 	boards: NewBoardInfo[],
 	setEditMode: React.Dispatch<React.SetStateAction<boolean>>,
 	setRenderNewTask: React.Dispatch<React.SetStateAction<boolean>>,
-	setEditTaskId: React.Dispatch<React.SetStateAction<number | null>>,
 	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void,
 ) => {
 	const updatedBoards = boards.map(board =>
@@ -70,7 +69,7 @@ export const updateTask = (
 	dispatch(setBoards(updatedBoards));
 	setEditMode(false);
 	setRenderNewTask(false);
-	setEditTaskId(null);
+	dispatch(setEditTaskId(null))
 	updateBoardsInLocalStorage(updatedBoards)
 };
 

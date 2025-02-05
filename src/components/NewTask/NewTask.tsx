@@ -5,11 +5,8 @@ import { NewBoardInfo, BoardTasks } from '../../types';
 import Tag from '../Tag/Tag';
 
 interface NewTaskProps {
-	selectedBoardId: number;
 	editMode: boolean;
 	setEditMode: React.Dispatch<SetStateAction<boolean>>;
-	editTaskId: number | null;
-	setEditTaskId: React.Dispatch<SetStateAction<number | null>>;
 	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
 	addTask: (newTaskInfo: BoardTasks) => void;
 	updateTask: (updatedTaskInfo: BoardTasks) => void;
@@ -18,11 +15,8 @@ interface NewTaskProps {
 }
 
 export default function NewTask({
-	selectedBoardId,
 	editMode,
 	setEditMode,
-	editTaskId,
-	setEditTaskId,
 	setRenderNewTask,
 	addTask,
 	updateTask,
@@ -45,11 +39,8 @@ export default function NewTask({
 		handleDeleteTask,
 		handleSaveTask,
 	} = useNewTask({
-		selectedBoardId,
-		editTaskId,
 		setRenderNewTask,
 		setEditMode,
-		setEditTaskId,
 		addTask,
 		updateTask,
 		updateBoardsInLocalStorage,

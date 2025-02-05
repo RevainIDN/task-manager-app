@@ -6,19 +6,15 @@ import { NewBoardInfo } from '../../types';
 import Task from '../Task/Task';
 
 interface TaskBoardProps {
-	selectedBoardId: number;
 	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
 	setEditMode: React.Dispatch<SetStateAction<boolean>>;
-	setEditTaskId: React.Dispatch<SetStateAction<number | null>>;
 	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
 }
 
-export default function TaskBoard({ selectedBoardId, setRenderNewTask, setEditMode, setEditTaskId, updateBoardsInLocalStorage }: TaskBoardProps) {
+export default function TaskBoard({ setRenderNewTask, setEditMode, updateBoardsInLocalStorage }: TaskBoardProps) {
 	const { handleShowNewTask, renderTasks, renderTasksLength, moveTask } = useTaskBoard({
-		selectedBoardId,
 		setRenderNewTask,
 		setEditMode,
-		setEditTaskId,
 		updateBoardsInLocalStorage,
 	});
 
@@ -43,7 +39,6 @@ export default function TaskBoard({ selectedBoardId, setRenderNewTask, setEditMo
 						task={task}
 						setRenderNewTask={setRenderNewTask}
 						setEditMode={setEditMode}
-						setEditTaskId={setEditTaskId}
 					/>
 				))}
 				{status === 'Backlog' && (

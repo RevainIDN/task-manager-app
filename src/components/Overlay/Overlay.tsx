@@ -1,19 +1,23 @@
-import { SetStateAction } from 'react';
 import './Overlay.css';
+import { SetStateAction } from 'react';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store';
+import { setEditTaskId } from '../../store/boardsSlice';
 
 interface OverlayProps {
 	setRenderNewBoard: React.Dispatch<SetStateAction<boolean>>;
 	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
 	setEditMode: React.Dispatch<SetStateAction<boolean>>;
-	setEditTaskId: React.Dispatch<SetStateAction<number | null>>;
 }
 
-export default function Overlay({ setRenderNewBoard, setRenderNewTask, setEditMode, setEditTaskId }: OverlayProps) {
+export default function Overlay({ setRenderNewBoard, setRenderNewTask, setEditMode }: OverlayProps) {
+	const dispatch = useDispatch<AppDispatch>()
+
 	const handleClose = () => {
 		setRenderNewBoard(false);
 		setRenderNewTask(false);
 		setEditMode(false);
-		setEditTaskId(null);
+		dispatch(setEditTaskId(null))
 	}
 
 	return <div className="overlay" onClick={handleClose}></div>;

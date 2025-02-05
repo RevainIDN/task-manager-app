@@ -2,30 +2,24 @@ import { useState, useEffect, SetStateAction } from 'react';
 import { NewBoardInfo, BoardTasks } from '../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store';
-import { setBoards } from '../store/boardsSlice';
+import { setBoards, setEditTaskId } from '../store/boardsSlice';
 
 interface UseNewTaskProps {
-	selectedBoardId: number;
-	editTaskId: number | null;
 	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
 	setEditMode: React.Dispatch<SetStateAction<boolean>>;
-	setEditTaskId: React.Dispatch<SetStateAction<number | null>>;
 	addTask: (newTaskInfo: BoardTasks) => void;
 	updateTask: (updatedTaskInfo: BoardTasks) => void;
 	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
 }
 export function useNewTask({
-	selectedBoardId,
-	editTaskId,
 	setRenderNewTask,
 	setEditMode,
-	setEditTaskId,
 	addTask,
 	updateTask,
 	updateBoardsInLocalStorage,
 }: UseNewTaskProps) {
 	const dispatch = useDispatch<AppDispatch>();
-	const boards = useSelector((state: RootState) => state.boards.boards);
+	const { boards, selectedBoardId, editTaskId } = useSelector((state: RootState) => state.boards);
 
 	const [dropDownListStatusSelected, setDropDownListStatusSelected] = useState<boolean>(false);
 	const [dropDownListTagsSelected, setDropDownListTagsSelected] = useState<boolean>(false);
@@ -157,7 +151,7 @@ export function useNewTask({
 	const handleCloseTask = () => {
 		setRenderNewTask(false);
 		setEditMode(false);
-		setEditTaskId(null);
+		dispatch(setEditTaskId(null));
 	};
 
 	// Удаление задачи
@@ -173,7 +167,7 @@ export function useNewTask({
 
 		setRenderNewTask(false);
 		setEditMode(false);
-		setEditTaskId(null);
+		dispatch(setEditTaskId(null));
 	};
 
 	// Сохранение задачи (новой или обновленной)

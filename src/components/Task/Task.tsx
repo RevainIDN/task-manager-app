@@ -1,18 +1,22 @@
 import '../Task/Task.css';
-import Tag from '../Tag/Tag';
 import { BoardTasks } from '../../types';
 import { SetStateAction } from 'react';
 import { useDrag } from 'react-dnd';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store';
+import { setEditTaskId } from '../../store/boardsSlice';
+import Tag from '../Tag/Tag';
 
 
 interface TaskProps {
 	task: BoardTasks;
 	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
 	setEditMode: React.Dispatch<SetStateAction<boolean>>;
-	setEditTaskId: React.Dispatch<SetStateAction<number | null>>;
 }
 
-export default function Task({ task, setRenderNewTask, setEditMode, setEditTaskId }: TaskProps) {
+export default function Task({ task, setRenderNewTask, setEditMode }: TaskProps) {
+	const dispatch = useDispatch<AppDispatch>()
+
 	const [{ isDragging }, drag] = useDrag({
 		type: 'TASK',
 		item: { id: task.id, status: task.status },
@@ -24,7 +28,7 @@ export default function Task({ task, setRenderNewTask, setEditMode, setEditTaskI
 	const handleEditTask = () => {
 		setEditMode(true)
 		setRenderNewTask(true);
-		setEditTaskId(task.id);
+		dispatch(setEditTaskId(task.id))
 	}
 
 	return (
