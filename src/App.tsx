@@ -8,6 +8,7 @@ import { addBoard, updateBoard, addTask, updateTask } from './utils/boardUtils';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from './store';
 import { setBoards } from './store/boardsSlice';
+import { setColorTheme } from './store/uiSlice';
 import logos from './assets/logos';
 import Sidebar from './components/Sidebar/Sidebar';
 import TaskBoard from './components/TaskBoard/TaskBoard';
@@ -18,8 +19,9 @@ import Overlay from './components/Overlay/Overlay';
 export default function App() {
   const dispatch = useDispatch<AppDispatch>();
   const { boards, selectedBoardId } = useSelector((state: RootState) => state.boards);
-  const { renderNewBoard, renderNewTask } = useSelector((state: RootState) => state.ui)
+  const { colorTheme, renderNewBoard, renderNewTask } = useSelector((state: RootState) => state.ui)
 
+  const [colorThemeStorage, setColorThemeStorage] = useLocalStorage<boolean>('colorTheme', false);
   const [boardsStorage, setBoardsStorage] = useLocalStorage<NewBoardInfo[]>('boards', [
     {
       id: 1,
@@ -36,25 +38,30 @@ export default function App() {
       ],
     },
   ]);
-  console.log(boards)
+
   useEffect(() => {
     if (boardsStorage.length > 0) {
       dispatch(setBoards(boardsStorage));
     }
   }, [boardsStorage, dispatch]);
 
+  useEffect(() => {
+    dispatch(setColorTheme(colorThemeStorage))
+  }, [colorThemeStorage])
+
   const updateBoardsInLocalStorage = (updatedBoards: NewBoardInfo[]) => {
     setBoardsStorage(updatedBoards);
   };
 
-  const [colorTheme, setColorTheme] = useLocalStorage<boolean>('colorTheme', false);
+  const updateColorThemeStorage = (updatedColorTheme: boolean) => {
+    setColorThemeStorage(updatedColorTheme)
+  }
 
   return (
     <div className={`task-manager ${colorTheme === true ? 'light-theme' : ''}`}>
       <Sidebar
-        colorTheme={colorTheme}
-        setColorTheme={setColorTheme}
         updateBoardsInLocalStorage={updateBoardsInLocalStorage}
+        updateColorThemeStorage={updateColorThemeStorage}
       />
       <DndProvider backend={HTML5Backend}>
         <TaskBoard
@@ -76,7 +83,6 @@ export default function App() {
           <NewTask
             addTask={(newTaskInfo) => addTask(newTaskInfo, selectedBoardId, dispatch, boards, updateBoardsInLocalStorage)}
             updateTask={(updatedTaskInfo) => updateTask(updatedTaskInfo, selectedBoardId, dispatch, boards, updateBoardsInLocalStorage)}
-            colorTheme={colorTheme}
             updateBoardsInLocalStorage={updateBoardsInLocalStorage}
           />
         </>

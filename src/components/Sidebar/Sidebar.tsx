@@ -1,36 +1,36 @@
-import { useState, SetStateAction } from 'react'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
-import { setRenderNewBoard } from '../../store/uiSlice';
+import { setColorTheme, setRenderNewBoard } from '../../store/uiSlice';
 import { NewBoardInfo } from '../../types';
 import '../Sidebar/Sidebar.css'
 import Board from '../Board/Board'
 
 interface SidebarProps {
-	colorTheme: boolean;
-	setColorTheme: React.Dispatch<SetStateAction<boolean>>;
 	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
+	updateColorThemeStorage: (updatedColorTheme: boolean) => void;
 }
 
-export default function Sidebar({ colorTheme, setColorTheme, updateBoardsInLocalStorage }: SidebarProps) {
+export default function Sidebar({ updateBoardsInLocalStorage, updateColorThemeStorage }: SidebarProps) {
 	const dispatch = useDispatch<AppDispatch>();
 	const boards = useSelector((state: RootState) => state.boards.boards);
-
+	const { colorTheme } = useSelector((state: RootState) => state.ui);
 	const [closeSidebar, setCloseSidebar] = useState<boolean>(false);
 
 	const handleSwitchColorTheme = () => {
-		setColorTheme(prev => !prev)
+		dispatch(setColorTheme(!colorTheme));
+		updateColorThemeStorage(!colorTheme)
 	}
 
 	const handleCloseSidebar = () => {
-		setCloseSidebar(prev => !prev)
+		setCloseSidebar(prev => !prev);
 	}
 
 	const handleShowNewBoard = () => {
 		if (boards.length >= 10) {
 			return
-		}
-		dispatch(setRenderNewBoard(true))
+		};
+		dispatch(setRenderNewBoard(true));
 	}
 
 	return (

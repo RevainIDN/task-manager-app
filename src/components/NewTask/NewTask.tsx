@@ -8,14 +8,12 @@ import Tag from '../Tag/Tag';
 interface NewTaskProps {
 	addTask: (newTaskInfo: BoardTasks) => void;
 	updateTask: (updatedTaskInfo: BoardTasks) => void;
-	colorTheme: boolean;
 	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
 }
 
 export default function NewTask({
 	addTask,
 	updateTask,
-	colorTheme,
 	updateBoardsInLocalStorage,
 }: NewTaskProps) {
 	const {
@@ -39,7 +37,7 @@ export default function NewTask({
 		updateBoardsInLocalStorage,
 	});
 
-	const { editMode } = useSelector((state: RootState) => state.ui)
+	const { colorTheme, editMode } = useSelector((state: RootState) => state.ui)
 
 	return (
 		<div className='new-task'>
