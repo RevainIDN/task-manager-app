@@ -1,13 +1,12 @@
 import { NewBoardInfo, BoardTasks } from "../types";
 import { AppDispatch } from "../store";
 import { setBoards, setEditTaskId } from "../store/boardsSlice";
-import { setEditMode } from "../store/uiSlice";
+import { setEditMode, setRenderNewBoard, setRenderNewTask } from "../store/uiSlice";
 
 export const addBoard = (
 	newBoardInfo: NewBoardInfo,
 	dispatch: AppDispatch,
 	boards: NewBoardInfo[],
-	setRenderNewBoard: React.Dispatch<React.SetStateAction<boolean>>,
 	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void,
 ) => {
 	const newBoardId = boards.length > 0 ? Math.max(...boards.map(board => board.id)) + 1 : 1;
@@ -25,7 +24,7 @@ export const addBoard = (
 	const updatedBoards = [...boards, { ...newBoardInfo, tasks: updatedTasks }];
 
 	dispatch(setBoards(updatedBoards));
-	setRenderNewBoard(false);
+	dispatch(setRenderNewBoard(false));
 	updateBoardsInLocalStorage(updatedBoards);
 };
 
@@ -33,7 +32,6 @@ export const updateBoard = (
 	updatedBoard: NewBoardInfo,
 	dispatch: AppDispatch,
 	boards: NewBoardInfo[],
-	setRenderNewBoard: React.Dispatch<React.SetStateAction<boolean>>,
 	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void,
 ) => {
 	const updatedBoards = boards.map(board =>
@@ -41,9 +39,9 @@ export const updateBoard = (
 	);
 
 	dispatch(setBoards(updatedBoards));
-	dispatch(setEditMode(false))
-	setRenderNewBoard(false);
-	updateBoardsInLocalStorage(updatedBoards)
+	dispatch(setEditMode(false));
+	dispatch(setRenderNewBoard(false));
+	updateBoardsInLocalStorage(updatedBoards);
 };
 
 export const updateTask = (
@@ -51,7 +49,6 @@ export const updateTask = (
 	currentBoard: number,
 	dispatch: AppDispatch,
 	boards: NewBoardInfo[],
-	setRenderNewTask: React.Dispatch<React.SetStateAction<boolean>>,
 	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void,
 ) => {
 	const updatedBoards = boards.map(board =>
@@ -66,10 +63,10 @@ export const updateTask = (
 	);
 
 	dispatch(setBoards(updatedBoards));
-	dispatch(setEditMode(false))
-	setRenderNewTask(false);
-	dispatch(setEditTaskId(null))
-	updateBoardsInLocalStorage(updatedBoards)
+	dispatch(setEditMode(false));
+	dispatch(setRenderNewTask(false));
+	dispatch(setEditTaskId(null));
+	updateBoardsInLocalStorage(updatedBoards);
 };
 
 export const addTask = (
@@ -77,7 +74,6 @@ export const addTask = (
 	currentBoard: number,
 	dispatch: AppDispatch,
 	boards: NewBoardInfo[],
-	setRenderNewTask: React.Dispatch<React.SetStateAction<boolean>>,
 	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void,
 ) => {
 	const newTaskId = Math.max(...boards.flatMap(board => board.tasks.map(task => task.id))) + 1;
@@ -91,6 +87,6 @@ export const addTask = (
 	);
 
 	dispatch(setBoards(updatedBoards));
-	setRenderNewTask(false);
+	dispatch(setRenderNewTask(false));
 	updateBoardsInLocalStorage(updatedBoards);
 };

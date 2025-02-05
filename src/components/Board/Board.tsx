@@ -4,18 +4,17 @@ import { useState, useEffect, SetStateAction } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { setBoards, setSelectedBoardId } from '../../store/boardsSlice';
-import { setEditMode } from '../../store/uiSlice';
+import { setEditMode, setRenderNewBoard } from '../../store/uiSlice';
 
 interface BoardProps {
 	closeSidebar: boolean;
 	newBoardInfo: NewBoardInfo;
 	colorTheme: boolean;
-	setRenderNewBoard: React.Dispatch<SetStateAction<boolean>>
 	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
 }
 
 const handleSelectBoard = (dispatch: AppDispatch, boardId: number) => {
-	dispatch(setSelectedBoardId(boardId))
+	dispatch(setSelectedBoardId(boardId));
 	setSelectedBoardId(boardId);
 };
 
@@ -32,18 +31,17 @@ const handleConfirmDeleteBoard = (
 ) => {
 	dispatch(setBoards(boards.filter((board: NewBoardInfo) => board.id !== boardId)));
 	setRenderNotice(false);
-	updateBoardsInLocalStorage(boards.filter((board: NewBoardInfo) => board.id !== boardId))
+	updateBoardsInLocalStorage(boards.filter((board: NewBoardInfo) => board.id !== boardId));
 };
 
 const handleEditBoard = (
 	dispatch: AppDispatch,
-	setRenderNewBoard: React.Dispatch<SetStateAction<boolean>>
 ) => {
-	dispatch(setEditMode(true))
-	setRenderNewBoard(true);
+	dispatch(setEditMode(true));
+	dispatch(setRenderNewBoard(true));
 };
 
-export default function Board({ closeSidebar, newBoardInfo, colorTheme, setRenderNewBoard, updateBoardsInLocalStorage }: BoardProps) {
+export default function Board({ closeSidebar, newBoardInfo, colorTheme, updateBoardsInLocalStorage }: BoardProps) {
 	const dispatch = useDispatch<AppDispatch>();
 	const { boards, selectedBoardId } = useSelector((state: RootState) => state.boards);
 	const [renderNotice, setRenderNotice] = useState<boolean>(false);
@@ -65,7 +63,7 @@ export default function Board({ closeSidebar, newBoardInfo, colorTheme, setRende
 						className='board-edit'
 						src={`${colorTheme === false ? 'Pencil-dark_theme.svg' : 'Pencil-ligth_theme.svg'}`}
 						alt='Edit'
-						onClick={() => handleEditBoard(dispatch, setRenderNewBoard)} />
+						onClick={() => handleEditBoard(dispatch)} />
 					<img
 						className='board-trash'
 						src={`${colorTheme === false ? 'Trash_icon-dark_theme.svg' : 'Trash_icon-light_theme.svg'}`}

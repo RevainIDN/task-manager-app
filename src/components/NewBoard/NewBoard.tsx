@@ -3,20 +3,18 @@ import { useState, useEffect, SetStateAction } from 'react';
 import { NewBoardInfo } from '../../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
-import { setEditMode } from '../../store/uiSlice';
+import { setEditMode, setRenderNewBoard } from '../../store/uiSlice';
 import logos from '../../assets/logos';
 
 interface NewBoard {
-	setRenderNewBoard: React.Dispatch<SetStateAction<boolean>>;
 	addBoard: (newBoardInfo: NewBoardInfo) => void;
 	updateBoard: (updatedBoard: NewBoardInfo) => void;
 }
 
 const handleClose = (
 	dispatch: AppDispatch,
-	setRenderNewBoard: React.Dispatch<SetStateAction<boolean>>,
 ) => {
-	setRenderNewBoard(false);
+	dispatch(setRenderNewBoard(false))
 	dispatch(setEditMode(false))
 };
 
@@ -54,7 +52,7 @@ const handleCreateBoard = (
 	editMode ? updateBoard(newBoardInfo) : addBoard(newBoardInfo);
 };
 
-export default function NewBoard({ setRenderNewBoard, addBoard, updateBoard }: NewBoard) {
+export default function NewBoard({ addBoard, updateBoard }: NewBoard) {
 	const dispatch = useDispatch<AppDispatch>()
 	const { boards, selectedBoardId } = useSelector((state: RootState) => state.boards);
 	const { editMode } = useSelector((state: RootState) => state.ui)
@@ -90,7 +88,7 @@ export default function NewBoard({ setRenderNewBoard, addBoard, updateBoard }: N
 					className='board-close'
 					src="Close_round-dark_theme.svg"
 					alt="Close"
-					onClick={() => handleClose(dispatch, setRenderNewBoard)}
+					onClick={() => handleClose(dispatch)}
 				/>
 			</div>
 			<label className='board-label'>
@@ -129,7 +127,7 @@ export default function NewBoard({ setRenderNewBoard, addBoard, updateBoard }: N
 				</button>
 				<button
 					className='board-btn board-btn-cancel'
-					onClick={() => handleClose(dispatch, setRenderNewBoard)}
+					onClick={() => handleClose(dispatch)}
 				>
 					Cancel
 				</button>

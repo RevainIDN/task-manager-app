@@ -1,16 +1,15 @@
 import { NewBoardInfo } from '../types';
-import { useState, Dispatch, SetStateAction, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store';
 import { setBoards, setEditTaskId } from '../store/boardsSlice';
-import { setEditMode } from '../store/uiSlice';
+import { setEditMode, setRenderNewTask } from '../store/uiSlice';
 
 interface UseTaskBoardProps {
-	setRenderNewTask: Dispatch<SetStateAction<boolean>>;
 	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
 }
 
-export function useTaskBoard({ setRenderNewTask, updateBoardsInLocalStorage }: UseTaskBoardProps) {
+export function useTaskBoard({ updateBoardsInLocalStorage }: UseTaskBoardProps) {
 	const dispatch = useDispatch<AppDispatch>();
 	const { boards, selectedBoardId } = useSelector((state: RootState) => state.boards);
 	const [updatedBoards, setUpdatedBoards] = useState(boards);
@@ -21,9 +20,8 @@ export function useTaskBoard({ setRenderNewTask, updateBoardsInLocalStorage }: U
 
 	const handleShowNewTask = () => {
 		dispatch(setEditTaskId(null))
-		setEditTaskId(null);
 		dispatch(setEditMode(false))
-		setRenderNewTask(true);
+		dispatch(setRenderNewTask(true))
 	};
 
 	const renderTasks = (status: string) => {

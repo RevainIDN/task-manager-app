@@ -1,5 +1,4 @@
 import '../NewTask/NewTask.css';
-import { SetStateAction } from 'react';
 import { useNewTask } from '../../hooks/useNewTask';
 import { NewBoardInfo, BoardTasks } from '../../types';
 import { useSelector } from 'react-redux';
@@ -7,7 +6,6 @@ import { RootState } from '../../store';
 import Tag from '../Tag/Tag';
 
 interface NewTaskProps {
-	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
 	addTask: (newTaskInfo: BoardTasks) => void;
 	updateTask: (updatedTaskInfo: BoardTasks) => void;
 	colorTheme: boolean;
@@ -15,7 +13,6 @@ interface NewTaskProps {
 }
 
 export default function NewTask({
-	setRenderNewTask,
 	addTask,
 	updateTask,
 	colorTheme,
@@ -37,7 +34,6 @@ export default function NewTask({
 		handleDeleteTask,
 		handleSaveTask,
 	} = useNewTask({
-		setRenderNewTask,
 		addTask,
 		updateTask,
 		updateBoardsInLocalStorage,

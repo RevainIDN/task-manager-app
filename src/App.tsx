@@ -1,5 +1,5 @@
 import './App.css';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { NewBoardInfo } from './types';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -18,7 +18,7 @@ import Overlay from './components/Overlay/Overlay';
 export default function App() {
   const dispatch = useDispatch<AppDispatch>();
   const { boards, selectedBoardId } = useSelector((state: RootState) => state.boards);
-  const { editMode } = useSelector((state: RootState) => state.ui)
+  const { renderNewBoard, renderNewTask } = useSelector((state: RootState) => state.ui)
 
   const [boardsStorage, setBoardsStorage] = useLocalStorage<NewBoardInfo[]>('boards', [
     {
@@ -47,50 +47,35 @@ export default function App() {
     setBoardsStorage(updatedBoards);
   };
 
-  // const [editMod, setEditMode] = useState<boolean>(false);
   const [colorTheme, setColorTheme] = useLocalStorage<boolean>('colorTheme', false);
-  const [renderNewBoard, setRenderNewBoard] = useState<boolean>(false);
-  const [renderNewTask, setRenderNewTask] = useState<boolean>(false);
-
-
 
   return (
     <div className={`task-manager ${colorTheme === true ? 'light-theme' : ''}`}>
       <Sidebar
         colorTheme={colorTheme}
         setColorTheme={setColorTheme}
-        setRenderNewBoard={setRenderNewBoard}
         updateBoardsInLocalStorage={updateBoardsInLocalStorage}
       />
       <DndProvider backend={HTML5Backend}>
         <TaskBoard
-          setRenderNewTask={setRenderNewTask}
           updateBoardsInLocalStorage={updateBoardsInLocalStorage}
         />
       </DndProvider>
       {renderNewBoard && (
         <>
-          <Overlay
-            setRenderNewBoard={setRenderNewBoard}
-            setRenderNewTask={setRenderNewTask}
-          />
+          <Overlay />
           <NewBoard
-            setRenderNewBoard={setRenderNewBoard}
-            addBoard={(newBoardInfo) => addBoard(newBoardInfo, dispatch, boards, setRenderNewBoard, updateBoardsInLocalStorage)}
-            updateBoard={(updatedBoard) => updateBoard(updatedBoard, dispatch, boards, setRenderNewBoard, updateBoardsInLocalStorage)}
+            addBoard={(newBoardInfo) => addBoard(newBoardInfo, dispatch, boards, updateBoardsInLocalStorage)}
+            updateBoard={(updatedBoard) => updateBoard(updatedBoard, dispatch, boards, updateBoardsInLocalStorage)}
           />
         </>
       )}
       {renderNewTask && (
         <>
-          <Overlay
-            setRenderNewBoard={setRenderNewBoard}
-            setRenderNewTask={setRenderNewTask}
-          />
+          <Overlay />
           <NewTask
-            setRenderNewTask={setRenderNewTask}
-            addTask={(newTaskInfo) => addTask(newTaskInfo, selectedBoardId, dispatch, boards, setRenderNewTask, updateBoardsInLocalStorage)}
-            updateTask={(updatedTaskInfo) => updateTask(updatedTaskInfo, selectedBoardId, dispatch, boards, setRenderNewTask, updateBoardsInLocalStorage)}
+            addTask={(newTaskInfo) => addTask(newTaskInfo, selectedBoardId, dispatch, boards, updateBoardsInLocalStorage)}
+            updateTask={(updatedTaskInfo) => updateTask(updatedTaskInfo, selectedBoardId, dispatch, boards, updateBoardsInLocalStorage)}
             colorTheme={colorTheme}
             updateBoardsInLocalStorage={updateBoardsInLocalStorage}
           />

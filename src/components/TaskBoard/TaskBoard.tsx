@@ -1,18 +1,15 @@
 import '../TaskBoard/TaskBoard.css';
-import { SetStateAction } from 'react';
 import { useTaskBoard } from '../../hooks/useTaskBoard';
 import { useDrop } from 'react-dnd';
 import { NewBoardInfo } from '../../types';
 import Task from '../Task/Task';
 
 interface TaskBoardProps {
-	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
 	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
 }
 
-export default function TaskBoard({ setRenderNewTask, updateBoardsInLocalStorage }: TaskBoardProps) {
+export default function TaskBoard({ updateBoardsInLocalStorage }: TaskBoardProps) {
 	const { handleShowNewTask, renderTasks, renderTasksLength, moveTask } = useTaskBoard({
-		setRenderNewTask,
 		updateBoardsInLocalStorage,
 	});
 
@@ -35,7 +32,6 @@ export default function TaskBoard({ setRenderNewTask, updateBoardsInLocalStorage
 					<Task
 						key={task.id}
 						task={task}
-						setRenderNewTask={setRenderNewTask}
 					/>
 				))}
 				{status === 'Backlog' && (
