@@ -1,5 +1,5 @@
 import { useState, useEffect, SetStateAction } from 'react';
-import { BoardTasks } from '../types';
+import { NewBoardInfo, BoardTasks } from '../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store';
 import { setBoards } from '../store/boardsSlice';
@@ -12,6 +12,7 @@ interface UseNewTaskProps {
 	setEditTaskId: React.Dispatch<SetStateAction<number | null>>;
 	addTask: (newTaskInfo: BoardTasks) => void;
 	updateTask: (updatedTaskInfo: BoardTasks) => void;
+	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
 }
 export function useNewTask({
 	selectedBoardId,
@@ -21,6 +22,7 @@ export function useNewTask({
 	setEditTaskId,
 	addTask,
 	updateTask,
+	updateBoardsInLocalStorage,
 }: UseNewTaskProps) {
 	const dispatch = useDispatch<AppDispatch>();
 	const boards = useSelector((state: RootState) => state.boards.boards);
@@ -167,6 +169,7 @@ export function useNewTask({
 		);
 
 		dispatch(setBoards(updatedBoards));
+		updateBoardsInLocalStorage(updatedBoards);
 
 		setRenderNewTask(false);
 		setEditMode(false);

@@ -1,7 +1,7 @@
 import '../NewTask/NewTask.css';
 import { SetStateAction } from 'react';
 import { useNewTask } from '../../hooks/useNewTask';
-import { BoardTasks } from '../../types';
+import { NewBoardInfo, BoardTasks } from '../../types';
 import Tag from '../Tag/Tag';
 
 interface NewTaskProps {
@@ -14,6 +14,7 @@ interface NewTaskProps {
 	addTask: (newTaskInfo: BoardTasks) => void;
 	updateTask: (updatedTaskInfo: BoardTasks) => void;
 	colorTheme: boolean;
+	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
 }
 
 export default function NewTask({
@@ -26,6 +27,7 @@ export default function NewTask({
 	addTask,
 	updateTask,
 	colorTheme,
+	updateBoardsInLocalStorage,
 }: NewTaskProps) {
 	const {
 		dropDownListStatusSelected,
@@ -50,6 +52,7 @@ export default function NewTask({
 		setEditTaskId,
 		addTask,
 		updateTask,
+		updateBoardsInLocalStorage,
 	});
 
 	return (

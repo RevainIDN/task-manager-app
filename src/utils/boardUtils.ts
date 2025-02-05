@@ -12,15 +12,13 @@ export const addBoard = (
 	const newBoardId = boards.length > 0 ? Math.max(...boards.map(board => board.id)) + 1 : 1;
 	newBoardInfo.id = newBoardId;
 
-	// Найти максимальный ID среди всех существующих задач
 	const allTasks = boards.flatMap(board => board.tasks);
 	const lastTaskId = allTasks.length > 0 ? Math.max(...allTasks.map(task => task.id)) : 0;
 	const nextTaskId = lastTaskId + 1;
 
-	// Если у новой доски есть дефолтные задачи, назначаем им новые ID
 	const updatedTasks = newBoardInfo.tasks.map((task, index) => ({
 		...task,
-		id: nextTaskId + index, // Каждой задаче присваивается новый ID
+		id: nextTaskId + index,
 	}));
 
 	const updatedBoards = [...boards, { ...newBoardInfo, tasks: updatedTasks }];

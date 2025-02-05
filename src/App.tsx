@@ -64,6 +64,7 @@ export default function App() {
         setSelectedBoardId={setSelectedBoardId}
         selectedBoardId={selectedBoardId}
         setEditMode={setEditMode}
+        updateBoardsInLocalStorage={updateBoardsInLocalStorage}
       />
       <DndProvider backend={HTML5Backend}>
         <TaskBoard
@@ -110,6 +111,7 @@ export default function App() {
             addTask={(newTaskInfo) => addTask(newTaskInfo, selectedBoardId, dispatch, boards, setRenderNewTask, updateBoardsInLocalStorage)}
             updateTask={(updatedTaskInfo) => updateTask(updatedTaskInfo, selectedBoardId, dispatch, boards, setEditMode, setRenderNewTask, setEditTaskId, updateBoardsInLocalStorage)}
             colorTheme={colorTheme}
+            updateBoardsInLocalStorage={updateBoardsInLocalStorage}
           />
         </>
       )}

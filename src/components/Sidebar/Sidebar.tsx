@@ -1,6 +1,7 @@
 import { useState, SetStateAction } from 'react'
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import { NewBoardInfo } from '../../types';
 import '../Sidebar/Sidebar.css'
 import Board from '../Board/Board'
 
@@ -11,9 +12,10 @@ interface SidebarProps {
 	selectedBoardId: number;
 	setSelectedBoardId: React.Dispatch<SetStateAction<number>>;
 	setEditMode: React.Dispatch<SetStateAction<boolean>>;
+	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
 }
 
-export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, selectedBoardId, setSelectedBoardId, setEditMode }: SidebarProps) {
+export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, selectedBoardId, setSelectedBoardId, setEditMode, updateBoardsInLocalStorage }: SidebarProps) {
 	const boards = useSelector((state: RootState) => state.boards.boards);
 
 	const [closeSidebar, setCloseSidebar] = useState<boolean>(false);
@@ -56,6 +58,7 @@ export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, 
 						colorTheme={colorTheme}
 						setEditMode={setEditMode}
 						setRenderNewBoard={setRenderNewBoard}
+						updateBoardsInLocalStorage={updateBoardsInLocalStorage}
 					/>
 				))}
 				<li className={`board-add-new ${closeSidebar ? 'change-display--close' : ''}`} onClick={handleShowNewBoard}>
