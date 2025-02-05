@@ -4,12 +4,12 @@ import { useState, useEffect, SetStateAction } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { setBoards, setSelectedBoardId } from '../../store/boardsSlice';
+import { setEditMode } from '../../store/uiSlice';
 
 interface BoardProps {
 	closeSidebar: boolean;
 	newBoardInfo: NewBoardInfo;
 	colorTheme: boolean;
-	setEditMode: React.Dispatch<SetStateAction<boolean>>
 	setRenderNewBoard: React.Dispatch<SetStateAction<boolean>>
 	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
 }
@@ -36,14 +36,14 @@ const handleConfirmDeleteBoard = (
 };
 
 const handleEditBoard = (
-	setEditBoard: React.Dispatch<SetStateAction<boolean>>,
+	dispatch: AppDispatch,
 	setRenderNewBoard: React.Dispatch<SetStateAction<boolean>>
 ) => {
-	setEditBoard(true);
+	dispatch(setEditMode(true))
 	setRenderNewBoard(true);
 };
 
-export default function Board({ closeSidebar, newBoardInfo, colorTheme, setEditMode, setRenderNewBoard, updateBoardsInLocalStorage }: BoardProps) {
+export default function Board({ closeSidebar, newBoardInfo, colorTheme, setRenderNewBoard, updateBoardsInLocalStorage }: BoardProps) {
 	const dispatch = useDispatch<AppDispatch>();
 	const { boards, selectedBoardId } = useSelector((state: RootState) => state.boards);
 	const [renderNotice, setRenderNotice] = useState<boolean>(false);
@@ -65,7 +65,7 @@ export default function Board({ closeSidebar, newBoardInfo, colorTheme, setEditM
 						className='board-edit'
 						src={`${colorTheme === false ? 'Pencil-dark_theme.svg' : 'Pencil-ligth_theme.svg'}`}
 						alt='Edit'
-						onClick={() => handleEditBoard(setEditMode, setRenderNewBoard)} />
+						onClick={() => handleEditBoard(dispatch, setRenderNewBoard)} />
 					<img
 						className='board-trash'
 						src={`${colorTheme === false ? 'Trash_icon-dark_theme.svg' : 'Trash_icon-light_theme.svg'}`}

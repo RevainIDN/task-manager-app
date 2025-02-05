@@ -2,11 +2,11 @@ import '../NewTask/NewTask.css';
 import { SetStateAction } from 'react';
 import { useNewTask } from '../../hooks/useNewTask';
 import { NewBoardInfo, BoardTasks } from '../../types';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 import Tag from '../Tag/Tag';
 
 interface NewTaskProps {
-	editMode: boolean;
-	setEditMode: React.Dispatch<SetStateAction<boolean>>;
 	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
 	addTask: (newTaskInfo: BoardTasks) => void;
 	updateTask: (updatedTaskInfo: BoardTasks) => void;
@@ -15,8 +15,6 @@ interface NewTaskProps {
 }
 
 export default function NewTask({
-	editMode,
-	setEditMode,
 	setRenderNewTask,
 	addTask,
 	updateTask,
@@ -40,11 +38,12 @@ export default function NewTask({
 		handleSaveTask,
 	} = useNewTask({
 		setRenderNewTask,
-		setEditMode,
 		addTask,
 		updateTask,
 		updateBoardsInLocalStorage,
 	});
+
+	const { editMode } = useSelector((state: RootState) => state.ui)
 
 	return (
 		<div className='new-task'>

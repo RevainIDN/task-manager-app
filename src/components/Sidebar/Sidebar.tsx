@@ -9,11 +9,10 @@ interface SidebarProps {
 	colorTheme: boolean;
 	setColorTheme: React.Dispatch<SetStateAction<boolean>>;
 	setRenderNewBoard: React.Dispatch<SetStateAction<boolean>>;
-	setEditMode: React.Dispatch<SetStateAction<boolean>>;
 	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
 }
 
-export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, setEditMode, updateBoardsInLocalStorage }: SidebarProps) {
+export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, updateBoardsInLocalStorage }: SidebarProps) {
 	const boards = useSelector((state: RootState) => state.boards.boards);
 
 	const [closeSidebar, setCloseSidebar] = useState<boolean>(false);
@@ -52,7 +51,6 @@ export default function Sidebar({ colorTheme, setColorTheme, setRenderNewBoard, 
 						newBoardInfo={board}
 						closeSidebar={closeSidebar}
 						colorTheme={colorTheme}
-						setEditMode={setEditMode}
 						setRenderNewBoard={setRenderNewBoard}
 						updateBoardsInLocalStorage={updateBoardsInLocalStorage}
 					/>

@@ -5,16 +5,16 @@ import { useDrag } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store';
 import { setEditTaskId } from '../../store/boardsSlice';
+import { setEditMode } from '../../store/uiSlice';
 import Tag from '../Tag/Tag';
 
 
 interface TaskProps {
 	task: BoardTasks;
 	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
-	setEditMode: React.Dispatch<SetStateAction<boolean>>;
 }
 
-export default function Task({ task, setRenderNewTask, setEditMode }: TaskProps) {
+export default function Task({ task, setRenderNewTask }: TaskProps) {
 	const dispatch = useDispatch<AppDispatch>()
 
 	const [{ isDragging }, drag] = useDrag({
@@ -26,7 +26,7 @@ export default function Task({ task, setRenderNewTask, setEditMode }: TaskProps)
 	});
 
 	const handleEditTask = () => {
-		setEditMode(true)
+		dispatch(setEditMode(true))
 		setRenderNewTask(true);
 		dispatch(setEditTaskId(task.id))
 	}

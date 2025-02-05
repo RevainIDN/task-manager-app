@@ -18,6 +18,7 @@ import Overlay from './components/Overlay/Overlay';
 export default function App() {
   const dispatch = useDispatch<AppDispatch>();
   const { boards, selectedBoardId } = useSelector((state: RootState) => state.boards);
+  const { editMode } = useSelector((state: RootState) => state.ui)
 
   const [boardsStorage, setBoardsStorage] = useLocalStorage<NewBoardInfo[]>('boards', [
     {
@@ -46,7 +47,7 @@ export default function App() {
     setBoardsStorage(updatedBoards);
   };
 
-  const [editMode, setEditMode] = useState<boolean>(false);
+  // const [editMod, setEditMode] = useState<boolean>(false);
   const [colorTheme, setColorTheme] = useLocalStorage<boolean>('colorTheme', false);
   const [renderNewBoard, setRenderNewBoard] = useState<boolean>(false);
   const [renderNewTask, setRenderNewTask] = useState<boolean>(false);
@@ -59,13 +60,11 @@ export default function App() {
         colorTheme={colorTheme}
         setColorTheme={setColorTheme}
         setRenderNewBoard={setRenderNewBoard}
-        setEditMode={setEditMode}
         updateBoardsInLocalStorage={updateBoardsInLocalStorage}
       />
       <DndProvider backend={HTML5Backend}>
         <TaskBoard
           setRenderNewTask={setRenderNewTask}
-          setEditMode={setEditMode}
           updateBoardsInLocalStorage={updateBoardsInLocalStorage}
         />
       </DndProvider>
@@ -74,14 +73,11 @@ export default function App() {
           <Overlay
             setRenderNewBoard={setRenderNewBoard}
             setRenderNewTask={setRenderNewTask}
-            setEditMode={setEditMode}
           />
           <NewBoard
-            editMode={editMode}
-            setEditMode={setEditMode}
             setRenderNewBoard={setRenderNewBoard}
             addBoard={(newBoardInfo) => addBoard(newBoardInfo, dispatch, boards, setRenderNewBoard, updateBoardsInLocalStorage)}
-            updateBoard={(updatedBoard) => updateBoard(updatedBoard, dispatch, boards, setEditMode, setRenderNewBoard, updateBoardsInLocalStorage)}
+            updateBoard={(updatedBoard) => updateBoard(updatedBoard, dispatch, boards, setRenderNewBoard, updateBoardsInLocalStorage)}
           />
         </>
       )}
@@ -90,14 +86,11 @@ export default function App() {
           <Overlay
             setRenderNewBoard={setRenderNewBoard}
             setRenderNewTask={setRenderNewTask}
-            setEditMode={setEditMode}
           />
           <NewTask
-            editMode={editMode}
-            setEditMode={setEditMode}
             setRenderNewTask={setRenderNewTask}
             addTask={(newTaskInfo) => addTask(newTaskInfo, selectedBoardId, dispatch, boards, setRenderNewTask, updateBoardsInLocalStorage)}
-            updateTask={(updatedTaskInfo) => updateTask(updatedTaskInfo, selectedBoardId, dispatch, boards, setEditMode, setRenderNewTask, updateBoardsInLocalStorage)}
+            updateTask={(updatedTaskInfo) => updateTask(updatedTaskInfo, selectedBoardId, dispatch, boards, setRenderNewTask, updateBoardsInLocalStorage)}
             colorTheme={colorTheme}
             updateBoardsInLocalStorage={updateBoardsInLocalStorage}
           />

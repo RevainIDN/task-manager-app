@@ -3,17 +3,16 @@ import { NewBoardInfo, BoardTasks } from '../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store';
 import { setBoards, setEditTaskId } from '../store/boardsSlice';
+import { setEditMode } from '../store/uiSlice';
 
 interface UseNewTaskProps {
 	setRenderNewTask: React.Dispatch<SetStateAction<boolean>>;
-	setEditMode: React.Dispatch<SetStateAction<boolean>>;
 	addTask: (newTaskInfo: BoardTasks) => void;
 	updateTask: (updatedTaskInfo: BoardTasks) => void;
 	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void;
 }
 export function useNewTask({
 	setRenderNewTask,
-	setEditMode,
 	addTask,
 	updateTask,
 	updateBoardsInLocalStorage,
@@ -150,7 +149,7 @@ export function useNewTask({
 	// Закрытие формы задачи
 	const handleCloseTask = () => {
 		setRenderNewTask(false);
-		setEditMode(false);
+		dispatch(setEditMode(false));
 		dispatch(setEditTaskId(null));
 	};
 
@@ -166,7 +165,7 @@ export function useNewTask({
 		updateBoardsInLocalStorage(updatedBoards);
 
 		setRenderNewTask(false);
-		setEditMode(false);
+		dispatch(setEditMode(false));
 		dispatch(setEditTaskId(null));
 	};
 

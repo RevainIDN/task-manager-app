@@ -1,24 +1,23 @@
+import '../NewBoard/NewBoard.css'
 import { useState, useEffect, SetStateAction } from 'react';
 import { NewBoardInfo } from '../../types';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import '../NewBoard/NewBoard.css'
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store';
+import { setEditMode } from '../../store/uiSlice';
 import logos from '../../assets/logos';
 
 interface NewBoard {
-	editMode: boolean;
-	setEditMode: React.Dispatch<SetStateAction<boolean>>;
 	setRenderNewBoard: React.Dispatch<SetStateAction<boolean>>;
 	addBoard: (newBoardInfo: NewBoardInfo) => void;
 	updateBoard: (updatedBoard: NewBoardInfo) => void;
 }
 
 const handleClose = (
+	dispatch: AppDispatch,
 	setRenderNewBoard: React.Dispatch<SetStateAction<boolean>>,
-	setEditMode: React.Dispatch<SetStateAction<boolean>>
 ) => {
 	setRenderNewBoard(false);
-	setEditMode(false);
+	dispatch(setEditMode(false))
 };
 
 const saveNewBoardName = (
@@ -55,8 +54,10 @@ const handleCreateBoard = (
 	editMode ? updateBoard(newBoardInfo) : addBoard(newBoardInfo);
 };
 
-export default function NewBoard({ editMode, setEditMode, setRenderNewBoard, addBoard, updateBoard }: NewBoard) {
+export default function NewBoard({ setRenderNewBoard, addBoard, updateBoard }: NewBoard) {
+	const dispatch = useDispatch<AppDispatch>()
 	const { boards, selectedBoardId } = useSelector((state: RootState) => state.boards);
+	const { editMode } = useSelector((state: RootState) => state.ui)
 	const [logoList, setLogoList] = useState<string[]>([]);
 	const [newBoardInfo, setNewBoardInfo] = useState<NewBoardInfo>(() => {
 		const editableBoard = boards.find(board => board.id === selectedBoardId);
@@ -89,7 +90,7 @@ export default function NewBoard({ editMode, setEditMode, setRenderNewBoard, add
 					className='board-close'
 					src="Close_round-dark_theme.svg"
 					alt="Close"
-					onClick={() => handleClose(setRenderNewBoard, setEditMode)}
+					onClick={() => handleClose(dispatch, setRenderNewBoard)}
 				/>
 			</div>
 			<label className='board-label'>
@@ -128,7 +129,7 @@ export default function NewBoard({ editMode, setEditMode, setRenderNewBoard, add
 				</button>
 				<button
 					className='board-btn board-btn-cancel'
-					onClick={() => handleClose(setRenderNewBoard, setEditMode)}
+					onClick={() => handleClose(dispatch, setRenderNewBoard)}
 				>
 					Cancel
 				</button>

@@ -1,6 +1,7 @@
 import { NewBoardInfo, BoardTasks } from "../types";
 import { AppDispatch } from "../store";
 import { setBoards, setEditTaskId } from "../store/boardsSlice";
+import { setEditMode } from "../store/uiSlice";
 
 export const addBoard = (
 	newBoardInfo: NewBoardInfo,
@@ -32,7 +33,6 @@ export const updateBoard = (
 	updatedBoard: NewBoardInfo,
 	dispatch: AppDispatch,
 	boards: NewBoardInfo[],
-	setEditMode: React.Dispatch<React.SetStateAction<boolean>>,
 	setRenderNewBoard: React.Dispatch<React.SetStateAction<boolean>>,
 	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void,
 ) => {
@@ -41,7 +41,7 @@ export const updateBoard = (
 	);
 
 	dispatch(setBoards(updatedBoards));
-	setEditMode(false);
+	dispatch(setEditMode(false))
 	setRenderNewBoard(false);
 	updateBoardsInLocalStorage(updatedBoards)
 };
@@ -51,7 +51,6 @@ export const updateTask = (
 	currentBoard: number,
 	dispatch: AppDispatch,
 	boards: NewBoardInfo[],
-	setEditMode: React.Dispatch<React.SetStateAction<boolean>>,
 	setRenderNewTask: React.Dispatch<React.SetStateAction<boolean>>,
 	updateBoardsInLocalStorage: (updatedBoards: NewBoardInfo[]) => void,
 ) => {
@@ -67,7 +66,7 @@ export const updateTask = (
 	);
 
 	dispatch(setBoards(updatedBoards));
-	setEditMode(false);
+	dispatch(setEditMode(false))
 	setRenderNewTask(false);
 	dispatch(setEditTaskId(null))
 	updateBoardsInLocalStorage(updatedBoards)
